@@ -285,61 +285,76 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
   const bottomRef = useRef(null);
   useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); },[messages]);
 
+  const pillBtn = (label, onClick) => (
+    <button
+      key={label}
+      onClick={onClick}
+      style={{
+        background:"#fff",
+        border:"1.5px solid #d0d0d0",
+        color:"#111",
+        borderRadius:999,
+        padding:"7px 14px",
+        fontSize:12,
+        cursor:"pointer",
+        whiteSpace:"nowrap",
+        fontFamily:"Inter,sans-serif",
+        fontWeight:400,
+        lineHeight:1.3,
+        transition:"border-color .15s, background .15s",
+      }}
+      onMouseEnter={e=>{ e.currentTarget.style.borderColor=UA_RED; e.currentTarget.style.color=UA_RED; }}
+      onMouseLeave={e=>{ e.currentTarget.style.borderColor="#d0d0d0"; e.currentTarget.style.color="#111"; }}
+    >{label}</button>
+  );
+
   return (
-    <div style={{width:248,minWidth:248,background:"#1c1c1e",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #2a2a2a",fontFamily:"Inter,sans-serif"}}>
+    <div style={{width:260,minWidth:260,background:"#fff",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #e8e8e8",fontFamily:"Inter,sans-serif",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
       {/* Header */}
-      <div style={{padding:"14px 16px 12px",borderBottom:"1px solid #2a2a2a",display:"flex",alignItems:"center",gap:10}}>
-        <div style={{width:32,height:32,borderRadius:"50%",background:UA_RED,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#fff",fontSize:14,flexShrink:0}}>Z</div>
+      <div style={{padding:"16px 18px 14px",borderBottom:"1px solid #f0f0f0",display:"flex",alignItems:"center",gap:12}}>
+        <div style={{width:36,height:36,borderRadius:"50%",background:UA_RED,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#fff",fontSize:15,flexShrink:0,letterSpacing:-0.5}}>Z</div>
         <div>
-          <div style={{color:"#fff",fontWeight:600,fontSize:13,lineHeight:1}}>Zoe</div>
-          <div style={{color:"#888",fontSize:11,marginTop:2}}>UA Running Advisor</div>
+          <div style={{color:"#111",fontWeight:700,fontSize:14,lineHeight:1}}>Zoe</div>
+          <div style={{color:"#888",fontSize:11,marginTop:3}}>UA Running Advisor</div>
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{flex:1,overflowY:"auto",padding:"12px 10px",display:"flex",flexDirection:"column",gap:8}}>
+      <div style={{flex:1,overflowY:"auto",padding:"16px 14px",display:"flex",flexDirection:"column",gap:10}}>
         {messages.map((msg,i)=>(
           <div key={i}>
             {msg.from==="zoe"
-              ? <div style={{background:"#2c2c2e",color:"#f0f0f0",borderRadius:"4px 14px 14px 4px",padding:"9px 12px",fontSize:12,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"96%"}}>{msg.text}</div>
+              ? <div style={{background:"#f2f2f2",color:"#111",borderRadius:"6px 18px 18px 6px",padding:"10px 14px",fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"95%"}}>{msg.text}</div>
               : <div style={{display:"flex",justifyContent:"flex-end"}}>
-                  <div style={{background:"#3a3a3c",color:"#fff",borderRadius:"14px 4px 4px 14px",padding:"9px 12px",fontSize:12,maxWidth:"88%",lineHeight:1.55}}>{msg.text}</div>
+                  <div style={{background:"#111",color:"#fff",borderRadius:"18px 6px 6px 18px",padding:"10px 14px",fontSize:13,maxWidth:"88%",lineHeight:1.55}}>{msg.text}</div>
                 </div>
             }
-            {/* Chips — only on last message */}
+
+            {/* Chips — horizontal wrapping pills */}
             {msg.chips && i===messages.length-1 && (
-              <div style={{display:"flex",flexDirection:"column",gap:4,marginTop:4}}>
-                {msg.chips.map((c,ci)=>(
-                  <button key={ci} onClick={()=>onChip(c)} style={{background:"transparent",border:"1px solid #3a3a3c",color:"#d0d0d0",borderRadius:20,padding:"6px 12px",fontSize:11,cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6,transition:"border-color .15s"}}>
-                    <span style={{color:UA_RED,fontSize:9}}>✦</span>{c}
-                  </button>
-                ))}
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
+                {msg.chips.map(c=>pillBtn(c,()=>onChip(c)))}
               </div>
             )}
-            {/* Suggested Qs — only on last message */}
+
+            {/* Suggested Qs — horizontal wrapping pills */}
             {msg.suggestedQs && i===messages.length-1 && (
-              <div style={{display:"flex",flexDirection:"column",gap:4,marginTop:4}}>
-                {msg.suggestedQs.map((q,qi)=>(
-                  <button key={qi} onClick={()=>onSuggestedQ(q)} style={{background:"transparent",border:"1px solid #3a3a3c",color:"#d0d0d0",borderRadius:8,padding:"7px 12px",fontSize:11,cursor:"pointer",textAlign:"left",display:"flex",alignItems:"flex-start",gap:6}}>
-                    <span style={{color:"#555",fontSize:9,marginTop:2,flexShrink:0}}>✦</span>{q}
-                  </button>
-                ))}
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
+                {msg.suggestedQs.map(q=>pillBtn(q,()=>onSuggestedQ(q)))}
               </div>
             )}
-            {/* Follow-up button */}
+
+            {/* Follow-up */}
             {msg.followUp && i===messages.length-1 && (
-              <div style={{marginTop:4}}>
-                <button onClick={()=>onFollowUp(msg.followUp)} style={{background:"transparent",border:"1px solid #3a3a3c",color:"#d0d0d0",borderRadius:20,padding:"6px 12px",fontSize:11,cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
-                  <span style={{color:UA_RED,fontSize:9}}>✦</span>{msg.followUp}
-                </button>
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
+                {pillBtn(msg.followUp,()=>onFollowUp(msg.followUp))}
               </div>
             )}
+
             {/* Suggested action */}
             {msg.suggestedAction && i===messages.length-1 && (
-              <div style={{marginTop:4}}>
-                <button onClick={()=>onSuggestedAction(msg.suggestedAction)} style={{background:"transparent",border:"1px solid #3a3a3c",color:"#d0d0d0",borderRadius:20,padding:"6px 12px",fontSize:11,cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
-                  <span style={{color:UA_RED,fontSize:9}}>✦</span>{msg.suggestedAction}
-                </button>
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
+                {pillBtn(msg.suggestedAction,()=>onSuggestedAction(msg.suggestedAction))}
               </div>
             )}
           </div>
@@ -348,16 +363,16 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
       </div>
 
       {/* Input */}
-      <div style={{borderTop:"1px solid #2a2a2a",padding:"10px 12px",display:"flex",gap:8,alignItems:"center"}}>
+      <div style={{borderTop:"1px solid #f0f0f0",padding:"12px 14px",display:"flex",gap:10,alignItems:"center"}}>
         <input
           value={inputVal}
           onChange={e=>setInputVal(e.target.value)}
           onKeyDown={e=>{ if(e.key==="Enter") onSend(); }}
-          placeholder="Tell Zoe what you need"
-          style={{flex:1,background:"#2c2c2e",border:"none",color:"#d0d0d0",borderRadius:20,padding:"8px 14px",fontSize:11,outline:"none"}}
+          placeholder="Type a question — e.g. 'Is this right for my marathon?'"
+          style={{flex:1,background:"#f5f5f5",border:"1.5px solid #e8e8e8",color:"#111",borderRadius:999,padding:"9px 16px",fontSize:12,outline:"none",fontFamily:"Inter,sans-serif"}}
         />
-        <button onClick={onSend} style={{background:UA_RED,border:"none",borderRadius:"50%",width:30,height:30,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        <button onClick={onSend} style={{background:UA_RED,border:"none",borderRadius:"50%",width:36,height:36,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"0 2px 8px rgba(200,16,46,0.3)"}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
         </button>
       </div>
     </div>
