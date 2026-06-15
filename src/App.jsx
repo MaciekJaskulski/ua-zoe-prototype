@@ -11,7 +11,7 @@ const UA_GREEN  = "#2e7d32";
 
 /* ─── SHOE DATA ─────────────────────────────────────────────────────────────── */
 const SHOES = {
-  lokedi:   { id:"lokedi",   name:"UA Velociti Elite 3 'Sharon Lokedi' PE", sub:"Unisex Running Shoes. Peak Speed, Carbon Plate",       price:"£225", tags:["HOVR+foam","Long distance"],                   colors:["#a8e63d","#e8e020","#f5c518"], img:"https://underarmour.scene7.com/is/image/Underarmour/6005377-301_DEFAULT?rp=standard-20pad|cartFullDesktop&qlt=85&bgc=f0f0f0&wid=600&hei=700", link:"https://und3rarmour-zoe-pdp.vercel.app/#" },
+  lokedi:   { id:"lokedi",   name:"UA Velociti Elite 3 'Sharon Lokedi' PE", sub:"Unisex Running Shoes. Peak Speed, Carbon Plate",       price:"£225", tags:["HOVR+foam","Long distance"],                   colors:["#a8e63d","#e8e020","#f5c518"], img:"/images/lokedi.png", link:"https://und3rarmour-zoe-pdp.vercel.app/#" },
   distance: { id:"distance", name:"UA Velociti Distance",                   sub:"Men's Running Shoes. Long Runs, Cushioned",             price:"£145", tags:["Road","HOVR+foam","298g","Long distance"],     colors:["#1565c0","#f5c518","#4caf50","#222","#555"],               img:"https://underarmour.scene7.com/is/image/Underarmour/6006030-402_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
   pace:     { id:"pace",     name:"UA Velociti Pace",                       sub:"Men's Running Shoes. Daily Miles, Lightweight",         price:"£100", tags:["HOVR+foam","Lightweight"],                     colors:["#e53935","#f5c518","#4fc3f7","#ff8a65","#9e9e9e","#222","#78909c"], img:"https://underarmour.scene7.com/is/image/Underarmour/6009107-001_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
   charged:  { id:"charged",  name:"UA Charged+ Turbulence 3",               sub:"Men's Running Shoes",                                  price:"£85",  tags:["Charged","Daily trainer"],                    colors:["#fff","#222","#e53935"],                   img:"https://underarmour.scene7.com/is/image/Underarmour/3027000-100_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
@@ -257,12 +257,7 @@ function CLPPage() {
 function ShoeImage({ shoe, height=210, imgHeight=190 }) {
   const [failed, setFailed] = useState(false);
   // Try alternate URL patterns on error
-  const urls = [
-    shoe.img,
-    shoe.img.replace("6005377-301_DEFAULT", "6005377-372_DEFAULT"),
-    "https://underarmour.scene7.com/is/image/Underarmour/6005377-301_DEFAULT",
-    "https://underarmour.scene7.com/is/image/Underarmour/6005377-372_DEFAULT",
-  ].filter(Boolean);
+  const urls = [shoe.img].filter(Boolean);
   const [urlIdx, setUrlIdx] = useState(0);
 
   if (failed || !shoe.img) {
