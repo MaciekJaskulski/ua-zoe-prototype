@@ -63,6 +63,11 @@ function isPriceQ(t){
   return (s.includes("expensive")||s.includes("price")||s.includes("cost")||s.includes("worth")||s.includes("cheap")||s.includes("why")&&s.includes("more")||s.includes("difference")&&(s.includes("price")||s.includes("cost")||s.includes("£"))||s.includes("justify")||s.includes("pay")||s.includes("pricey"))
     && (s.includes("lokedi")||s.includes("elite")||s.includes("sharon")||s.includes("expensive")||s.includes("more")||s.includes("225")||s.includes("cost"));
 }
+const PRICE_CITATIONS = [
+  { abbr:"UA", label:"Under Armour — Velociti Elite 3 Story", url:"https://about.underarmour.com/en/stories/2025/10/under-armour-s-next-generation-of-velociti-is-engineered-for-spe.html", color:"#c8102e" },
+  { abbr:"VE", label:"UA Velociti Elite 3 Product Page", url:"https://www.underarmour.co.uk/en-gb/p/ua-velociti-elite-3-sharon-lokedi-pe-unisex-running-shoes/6005377.html", color:"#1a1a1a" },
+];
+
 const PRICE_ANSWER=`The £80 price gap comes down to one thing above everything else: the full-length carbon fibre plate.
 
 Here's why that matters:
@@ -346,6 +351,23 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
   );
 }
 
+/* ─── CITATION BAR ───────────────────────────────────────────────────────────── */
+function CitationBar({ sources }) {
+  return (
+    <div style={{display:"flex",alignItems:"center",gap:8,marginTop:8}}>
+      <span style={{fontSize:12,color:"#555",fontWeight:400}}>{sources.length} source{sources.length!==1?"s":""}</span>
+      <div style={{display:"flex",gap:4}}>
+        {sources.map((s,i)=>(
+          <a key={i} href={s.url} target="_blank" rel="noreferrer" title={s.label}
+            style={{width:22,height:22,borderRadius:"50%",background:s.color||"#c8102e",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#fff",textDecoration:"none",flexShrink:0,letterSpacing:-0.3}}>
+            {s.abbr}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── ZOE CHAT ──────────────────────────────────────────────────────────────── */
 function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp, inputVal, setInputVal, onSend }) {
   const bottomRef = useRef(null);
@@ -390,7 +412,10 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
         {messages.map((msg,i)=>(
           <div key={i}>
             {msg.from==="zoe"
-              ? <div style={{background:"#f2f2f2",color:"#111",borderRadius:"6px 18px 18px 6px",padding:"10px 14px",fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"95%"}}>{msg.text}</div>
+              ? <div>
+                  <div style={{background:"#f2f2f2",color:"#111",borderRadius:"6px 18px 18px 6px",padding:"10px 14px",fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"95%"}}>{msg.text}</div>
+                  {msg.citations && <CitationBar sources={msg.citations}/>}
+                </div>
               : <div style={{display:"flex",justifyContent:"flex-end"}}>
                   <div style={{background:"#111",color:"#fff",borderRadius:"18px 6px 6px 18px",padding:"10px 14px",fontSize:13,maxWidth:"88%",lineHeight:1.55}}>{msg.text}</div>
                 </div>
@@ -613,7 +638,7 @@ export default function App() {
     if(q==="What is UA HOVR?") {
       setTimeout(()=>{ const s=STEPS[10]; pushZoe({text:s.text,followUp:s.followUp}); setScriptStep(10); },450);
     } else if(isPriceQ(q)) {
-      setTimeout(()=>pushZoe({text:PRICE_ANSWER}),450);
+      setTimeout(()=>pushZoe({text:PRICE_ANSWER, citations:PRICE_CITATIONS}),450);
     } else {
       // post-comparison suggested Qs — contextual answers
       const answers = {
@@ -640,7 +665,7 @@ export default function App() {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
     if(isRainQ(txt))   { setTimeout(()=>pushZoe({text:RAIN_ANSWER}),500); return; }
-    if(isPriceQ(txt))  { setTimeout(()=>pushZoe({text:PRICE_ANSWER}),500); return; }
+    if(isPriceQ(txt))  { setTimeout(()=>pushZoe({text:PRICE_ANSWER, citations:PRICE_CITATIONS}),500); return; }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
   };
 
