@@ -639,7 +639,7 @@ export default function App() {
   const handleSend = () => {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
-    if(isRainQ(txt))   { setTimeout(()=>pushZoe({text:RAIN_ANSWER, suggestedQs:["Why is the Lokedi so much more expensive than the Distance?"]}),500); return; }
+    if(isRainQ(txt))   { setTimeout(()=>pushZoe({text:RAIN_ANSWER}),500); return; }
     if(isPriceQ(txt))  { setTimeout(()=>pushZoe({text:PRICE_ANSWER}),500); return; }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
   };
