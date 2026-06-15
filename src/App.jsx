@@ -57,6 +57,30 @@ UA Velociti Elite 3 'Lokedi' PE: The Leno weave upper is more resistant to water
 
 For race-day conditions that might turn wet, the Lokedi PE has the edge. For everyday wet-weather training, the Distance is more than adequate — just expect it to feel a touch heavier after a downpour.`;
 
+/* ─── PRICE QUESTION DETECTION ───────────────────────────────────────────────── */
+function isPriceQ(t){
+  const s=t.toLowerCase();
+  return (s.includes("expensive")||s.includes("price")||s.includes("cost")||s.includes("worth")||s.includes("cheap")||s.includes("why")&&s.includes("more")||s.includes("difference")&&(s.includes("price")||s.includes("cost")||s.includes("£"))||s.includes("justify")||s.includes("pay")||s.includes("pricey"))
+    && (s.includes("lokedi")||s.includes("elite")||s.includes("sharon")||s.includes("expensive")||s.includes("more")||s.includes("225")||s.includes("cost"));
+}
+const PRICE_ANSWER=`The £80 price gap comes down to one thing above everything else: the full-length carbon fibre plate.
+
+Here's why that matters:
+
+Carbon fibre plate — the key technology
+A carbon plate is embedded into the midsole and acts like a spring-loaded launchpad. When your foot compresses the foam on landing, the plate stores that energy and releases it explosively at toe-off — propelling you forward with less muscular effort. In practice, studies on carbon plate shoes show energy savings of 4–8% per stride. Over a marathon that adds up to a significant reduction in fatigue, which is why elite runners like Sharon Lokedi rely on them to set course records.
+
+The plate in the Lokedi PE isn't off-the-shelf — it's micro-tuned for geometry and flex point, developed alongside professional marathon runners to maximise propulsion at race pace specifically.
+
+What else justifies the price:
+• HOVR+ supercritical foam — a lighter, more responsive version of standard HOVR, engineered to maintain energy return over the full 42km
+• Leno weave upper — a specialist material that provides race-day lockdown at a fraction of the weight of standard mesh
+• 221g total weight — 77g lighter than the Distance, which matters enormously at mile 20
+• Race-proven pedigree — the exact colourway Sharon Lokedi wore to win Boston 2025
+
+Is it worth it for you?
+If you're training for a marathon and racing it too, the ideal setup is the Distance for your training block and the Lokedi PE for race day itself. That way you're not burning through a £225 shoe on daily mileage, but you still get the performance edge when it counts.`;
+
 /* ─── CONVERSATION SCRIPT ───────────────────────────────────────────────────── */
 // gridState: null | 'road' | 'marathon' | 'final'
 const STEPS = [
@@ -588,6 +612,8 @@ export default function App() {
     pushUser(q);
     if(q==="What is UA HOVR?") {
       setTimeout(()=>{ const s=STEPS[10]; pushZoe({text:s.text,followUp:s.followUp}); setScriptStep(10); },450);
+    } else if(isPriceQ(q)) {
+      setTimeout(()=>pushZoe({text:PRICE_ANSWER}),450);
     } else {
       // post-comparison suggested Qs — contextual answers
       const answers = {
@@ -613,7 +639,8 @@ export default function App() {
   const handleSend = () => {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
-    if(isRainQ(txt)) { setTimeout(()=>pushZoe({text:RAIN_ANSWER}),500); return; }
+    if(isRainQ(txt))   { setTimeout(()=>pushZoe({text:RAIN_ANSWER, suggestedQs:["Why is the Lokedi so much more expensive than the Distance?"]}),500); return; }
+    if(isPriceQ(txt))  { setTimeout(()=>pushZoe({text:PRICE_ANSWER}),500); return; }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
   };
 
