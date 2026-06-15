@@ -11,7 +11,7 @@ const UA_GREEN  = "#2e7d32";
 
 /* ─── SHOE DATA ─────────────────────────────────────────────────────────────── */
 const SHOES = {
-  lokedi:   { id:"lokedi",   name:"UA Velociti Elite 3 'Sharon Lokedi' PE", sub:"Unisex Running Shoes. Peak Speed, Carbon Plate",       price:"£225", tags:["HOVR+foam","Long distance"],                   colors:["#a8e63d","#e8e020","#f5c518"], img:"https://underarmour.scene7.com/is/image/Underarmour/6005377-301_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0", link:"https://und3rarmour-zoe-pdp.vercel.app/#" },
+  lokedi:   { id:"lokedi",   name:"UA Velociti Elite 3 'Sharon Lokedi' PE", sub:"Unisex Running Shoes. Peak Speed, Carbon Plate",       price:"£225", tags:["HOVR+foam","Long distance"],                   colors:["#a8e63d","#e8e020","#f5c518"], img:"https://underarmour.scene7.com/is/image/Underarmour/6005377-301_DEFAULT?rp=standard-20pad|cartFullDesktop&qlt=85&bgc=f0f0f0&wid=600&hei=700", link:"https://und3rarmour-zoe-pdp.vercel.app/#" },
   distance: { id:"distance", name:"UA Velociti Distance",                   sub:"Men's Running Shoes. Long Runs, Cushioned",             price:"£145", tags:["Road","HOVR+foam","298g","Long distance"],     colors:["#1565c0","#f5c518","#4caf50","#222","#555"],               img:"https://underarmour.scene7.com/is/image/Underarmour/6006030-402_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
   pace:     { id:"pace",     name:"UA Velociti Pace",                       sub:"Men's Running Shoes. Daily Miles, Lightweight",         price:"£100", tags:["HOVR+foam","Lightweight"],                     colors:["#e53935","#f5c518","#4fc3f7","#ff8a65","#9e9e9e","#222","#78909c"], img:"https://underarmour.scene7.com/is/image/Underarmour/6009107-001_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
   charged:  { id:"charged",  name:"UA Charged+ Turbulence 3",               sub:"Men's Running Shoes",                                  price:"£85",  tags:["Charged","Daily trainer"],                    colors:["#fff","#222","#e53935"],                   img:"https://underarmour.scene7.com/is/image/Underarmour/3027000-100_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
@@ -253,14 +253,44 @@ function CLPPage() {
   );
 }
 
+/* ─── SHOE IMAGE with fallback ──────────────────────────────────────────────── */
+function ShoeImage({ shoe, height=210, imgHeight=190 }) {
+  const [failed, setFailed] = useState(false);
+  // Try alternate URL patterns on error
+  const urls = [
+    shoe.img,
+    shoe.img.replace("6005377-301_DEFAULT", "6005377-372_DEFAULT"),
+    "https://underarmour.scene7.com/is/image/Underarmour/6005377-301_DEFAULT",
+    "https://underarmour.scene7.com/is/image/Underarmour/6005377-372_DEFAULT",
+  ].filter(Boolean);
+  const [urlIdx, setUrlIdx] = useState(0);
+
+  if (failed || !shoe.img) {
+    return (
+      <div style={{background:"#f0f0f0",height,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6}}>
+        <div style={{fontSize:32}}>👟</div>
+        <div style={{fontSize:11,color:"#999",textAlign:"center",padding:"0 8px"}}>{shoe.name}</div>
+      </div>
+    );
+  }
+  return (
+    <div style={{background:"#f7f7f7",height,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <img
+        src={urlIdx < urls.length ? urls[urlIdx] : urls[0]}
+        alt={shoe.name}
+        style={{maxHeight:imgHeight,maxWidth:"100%",objectFit:"contain"}}
+        onError={()=>{ if(urlIdx < urls.length-1) setUrlIdx(i=>i+1); else setFailed(true); }}
+      />
+    </div>
+  );
+}
+
 /* ─── PRODUCT CARD (grid) ───────────────────────────────────────────────────── */
 function ProductCard({ shoe, compareSelected, onCompareToggle }) {
   return (
     <div style={{background:"#fff",border:"1px solid #eee",borderRadius:2,overflow:"hidden",position:"relative",transition:"box-shadow .2s"}}>
       <div style={{position:"absolute",top:10,right:10,zIndex:1,cursor:"pointer",fontSize:18,color:"#bbb"}}>♡</div>
-      <div style={{background:"#f7f7f7",height:210,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-        <img src={shoe.img} alt={shoe.name} style={{maxHeight:190,maxWidth:"100%",objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-      </div>
+      <ShoeImage shoe={shoe} height={210} imgHeight={190}/>
       <div style={{padding:"8px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <button onClick={()=>onCompareToggle(shoe)} style={{background:compareSelected?"#333":UA_BLACK,color:"#fff",border:"none",borderRadius:20,padding:"6px 16px",fontSize:12,fontWeight:500,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
           {compareSelected?"✓ Compare":"Compare"}
@@ -416,9 +446,7 @@ function CompareModal({ onConfirm, onClose }) {
         <div style={{display:"flex",gap:16,marginBottom:24}}>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
             <div key={s.id} style={{flex:1,border:"1px solid #eee",borderRadius:8,padding:14}}>
-              <div style={{background:"#f5f5f5",borderRadius:4,height:120,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:10}}>
-                <img src={s.img} alt={s.name} style={{maxHeight:110,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
+              <ShoeImage shoe={s} height={120} imgHeight={108}/>
               <div style={{fontWeight:600,fontSize:13,marginBottom:2,color:"#111"}}>{s.name}</div>
               <div style={{fontSize:11,color:"#777",marginBottom:8}}>{s.sub}</div>
               <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
@@ -446,7 +474,9 @@ function CompareTable() {
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
             <div key={s.id} style={{padding:"0 20px 20px",display:"flex",gap:14,alignItems:"flex-start"}}>
-              <img src={s.img} alt={s.name} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{width:90,height:100,objectFit:"contain",background:"#f5f5f5",borderRadius:4,cursor:s.id==="lokedi"?"pointer":"default",flexShrink:0}} onError={e=>{e.target.style.display="none"}}/>
+              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{cursor:s.id==="lokedi"?"pointer":"default",flexShrink:0}}>
+                <ShoeImage shoe={s} height={100} imgHeight={90}/>
+              </div>
               <div>
                 <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:700,fontSize:14,marginBottom:3,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
                 <div style={{fontSize:12,color:"#777",marginBottom:6}}>{s.sub}</div>
