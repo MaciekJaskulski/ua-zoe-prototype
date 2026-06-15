@@ -22,10 +22,27 @@ const SHOES = {
   explor:   { id:"explor",   name:"UA EXPLOR Trail",                        sub:"Unisex Shoes",                                         price:"£135", tags:["Trail","Grip"],                                colors:["#4caf50","#222","#78909c"],                img:"https://underarmour.scene7.com/is/image/Underarmour/3027199-001_DEFAULT?rp=standard-20pad%7CcartFullDesktop&qlt=85&bgc=f0f0f0&wid=500&hei=600&size=476%2C580&op_usm=1.75%2C0.3%2C2%2C0" },
 };
 
-const GRID_ALL      = [SHOES.lokedi,SHOES.distance,SHOES.pace,SHOES.charged,SHOES.haloRacer,SHOES.haloSE,SHOES.spd,SHOES.rogue,SHOES.explor];
-const GRID_ROAD     = [SHOES.lokedi,SHOES.distance,SHOES.pace,SHOES.charged,SHOES.haloRacer,SHOES.haloSE,SHOES.spd,SHOES.rogue,SHOES.explor];
-const GRID_MARATHON = [SHOES.lokedi,SHOES.distance,SHOES.pace,SHOES.charged,SHOES.haloRacer,SHOES.haloSE,SHOES.spd,SHOES.rogue,SHOES.explor];
-const GRID_FINAL    = [SHOES.lokedi,SHOES.distance,SHOES.pace,SHOES.charged,SHOES.haloRacer];
+// ALL 64 — wide mix, no clear theme
+const GRID_ALL = [
+  SHOES.haloSE, SHOES.explor, SHOES.charged, SHOES.rogue,
+  SHOES.spd, SHOES.haloRacer, SHOES.pace, SHOES.lokedi, SHOES.distance,
+];
+// ROAD 24 — road-relevant shoes, explor (trail) removed, reordered
+const GRID_ROAD = [
+  SHOES.distance, SHOES.haloRacer, SHOES.charged,
+  SHOES.pace, SHOES.spd, SHOES.lokedi,
+  SHOES.haloSE, SHOES.rogue,
+];
+// MARATHON 10 — distance-focused, lightweight, only road shoes
+const GRID_MARATHON = [
+  SHOES.lokedi, SHOES.distance, SHOES.pace,
+  SHOES.spd, SHOES.haloRacer,
+];
+// FINAL 5 — best matches
+const GRID_FINAL = [
+  SHOES.lokedi, SHOES.distance, SHOES.pace,
+  SHOES.charged, SHOES.haloRacer,
+];
 
 /* ─── RAIN DETECTION ────────────────────────────────────────────────────────── */
 function isRainQ(t){
@@ -529,6 +546,8 @@ export default function App() {
   const [productCount, setProductCount]   = useState(64);
   const [currentGrid, setCurrentGrid]     = useState(GRID_ALL);
   const [compareList, setCompareList]     = useState([]);
+  const [gridKey, setGridKey]             = useState(0);
+  const [gridVisible, setGridVisible]     = useState(true);
   const [showModal, setShowModal]         = useState(false);
   const [chatInput, setChatInput]         = useState("");
 
@@ -537,9 +556,16 @@ export default function App() {
 
   /* apply grid state from a script step */
   const applyGridState = (step) => {
-    if(step.gridState==="road")     { setFilterTags(["Categories: Road"]); setProductCount(24); setCurrentGrid(GRID_ROAD); }
-    if(step.gridState==="marathon") { setFilterTags(["Categories: Road","Categories: Long distance"]); setProductCount(10); setCurrentGrid(GRID_MARATHON); }
-    if(step.gridState==="final")    { setFilterTags(["Categories: Shoes","Categories: Road","Categories: Long distance"]); setProductCount(5); setCurrentGrid(GRID_FINAL); }
+    if(!step.gridState) return;
+    // Fade out, swap grid, fade in
+    setGridVisible(false);
+    setTimeout(() => {
+      if(step.gridState==="road")     { setFilterTags(["Categories: Road"]); setProductCount(24); setCurrentGrid(GRID_ROAD); }
+      if(step.gridState==="marathon") { setFilterTags(["Categories: Road","Categories: Long distance"]); setProductCount(10); setCurrentGrid(GRID_MARATHON); }
+      if(step.gridState==="final")    { setFilterTags(["Categories: Shoes","Categories: Road","Categories: Long distance"]); setProductCount(5); setCurrentGrid(GRID_FINAL); }
+      setGridKey(k => k+1);
+      setGridVisible(true);
+    }, 220);
   };
 
   /* chip click — advances through scripted pairs */
@@ -638,7 +664,7 @@ export default function App() {
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))}/>
-              <div style={{padding:"12px 24px 40px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
+              <div key={gridKey} style={{padding:"12px 24px 40px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                 ))}
