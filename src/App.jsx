@@ -107,31 +107,48 @@ const STEPS = [
 ];
 
 /* ─── NAV ───────────────────────────────────────────────────────────────────── */
-function Nav({ onSearchClick }) {
+function Nav({ onSearchFocus, searchQuery, setSearchQuery, onSearchSubmit, searchActive }) {
+  const inputRef = useRef(null);
+  useEffect(()=>{ if(searchActive && inputRef.current) inputRef.current.focus(); },[searchActive]);
   return (
     <div style={{position:"sticky",top:0,zIndex:200,fontFamily:"Inter,sans-serif"}}>
-      <div style={{background:"#000",textAlign:"center",padding:"7px 0",fontSize:12,color:"#bbb",letterSpacing:.4,position:"relative"}}>
+      {/* Banner */}
+      <div style={{background:"#000",textAlign:"center",padding:"7px 0",fontSize:12,color:"#bbb",letterSpacing:.4}}>
         FREE HOME DELIVERY OVER £50 | 60 DAYS RETURNS
         <span style={{position:"absolute",right:24,top:7,fontSize:12,color:"#bbb",display:"flex",gap:16}}>
           <span>Need Help?</span><span>🇬🇧 GB ▾</span><span>English</span><span>Register | Log In</span>
         </span>
       </div>
+      {/* Main row */}
       <div style={{background:"#000",display:"flex",alignItems:"center",padding:"0 24px",height:60,gap:32}}>
+        {/* Logo */}
         <svg width="36" height="36" viewBox="0 0 50 50" fill="white"><path d="M25 5 L5 20 L10 20 L10 35 L20 35 L20 22 L30 22 L30 35 L40 35 L40 20 L45 20 Z"/></svg>
+        {/* Nav links */}
         <div style={{display:"flex",gap:24,flex:1,justifyContent:"center"}}>
           {["Promotion","Men","Women","Kids","Sports","Discover","Outlet"].map(l=>(
             <span key={l} style={{color:"#fff",fontSize:13,fontWeight:500,letterSpacing:.3,cursor:"default"}}>{l}</span>
           ))}
         </div>
-        <div onClick={onSearchClick} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"pointer"}}>
+        {/* Search */}
+        <div style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"text"}} onClick={()=>{ if(!searchActive) onSearchFocus(); }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <span style={{color:"#666",fontSize:13}}>Search UA</span>
+          <input
+            ref={inputRef}
+            value={searchQuery}
+            onChange={e=>setSearchQuery(e.target.value)}
+            onFocus={onSearchFocus}
+            onKeyDown={e=>{ if(e.key==="Enter") onSearchSubmit(); }}
+            placeholder="Search UA"
+            style={{background:"transparent",border:"none",outline:"none",color:"#fff",fontSize:13,flex:1,"::placeholder":{color:"#888"}}}
+          />
+          {searchQuery && <span onClick={()=>setSearchQuery("")} style={{color:"#888",cursor:"pointer",fontSize:14}}>✕</span>}
         </div>
         <div style={{display:"flex",gap:16}}>
           <span style={{color:"#aaa",fontSize:18,cursor:"pointer"}}>♡</span>
           <span style={{color:"#aaa",fontSize:18,cursor:"pointer"}}>🛍</span>
         </div>
       </div>
+      {/* Sale strip */}
       <div style={{background:"#111",textAlign:"center",padding:"5px 0",fontSize:12,color:"#bbb",borderTop:"1px solid #222"}}>
         Early Access: Up to 50% off for Members.
       </div>
@@ -139,280 +156,172 @@ function Nav({ onSearchClick }) {
   );
 }
 
-/* ─── SEARCH MODAL ───────────────────────────────────────────────────────────── */
-function SearchModal({ onClose, onNavigate }) {
-  const [q, setQ] = useState("");
-  const inputRef = useRef(null);
-  useEffect(() => { inputRef.current?.focus(); }, []);
-
-  const suggestions = ["women running shoes","trail running shoes","kids running shoes","ua velocity 3 running shoes","running shoes for men","white running shoes","surge 3 running shoes","black running shoes"];
-  const topProducts = [
-    { name:"UA Halo Runner",    sub:"Men's Running Shoes",   price:"£87.97", was:"£125", img:SHOES.charged.img },
-    { name:"UA Halo Runner SE", sub:"Men's Running Shoes",   price:"£67.97", was:"£135", img:SHOES.haloSE.img },
-    { name:"UA Halo Runner",    sub:"Women's Running Shoes", price:"£87.97", was:"£125", img:SHOES.haloRacer.img },
-    { name:"UA Velociti Pace",  sub:"Women's Running Shoes. Daily Miles, Lightweight", price:"£79.97", was:"£100", img:SHOES.pace.img },
+/* ─── SEARCH DRAWER ─────────────────────────────────────────────────────────── */
+function SearchDrawer({ query, onClose, onSubmit }) {
+  const topProducts=[
+    {name:"UA Halo Runner",     sub:"Men's Running Shoes",   price:"£87.97",was:"£125", colors:4, img:SHOES.charged.img},
+    {name:"UA Halo Runner SE",  sub:"Men's Running Shoes",   price:"£67.97",was:"£135", colors:6, img:SHOES.haloSE.img},
+    {name:"UA Halo Runner",     sub:"Women's Running Shoes", price:"£87.97",was:"£125", colors:2, img:SHOES.haloRacer.img},
+    {name:"UA Velociti Pace",   sub:"Women's Running Shoes. Daily Miles, Lightweight", price:"£79.97",was:"£100", colors:3, img:SHOES.pace.img},
   ];
-
-  const handleKey = (e) => {
-    if (e.key === "Enter" && q.trim()) { onNavigate(); }
-    if (e.key === "Escape") { onClose(); }
-  };
-
+  const suggestions=["women running shoes","trail running shoes","kids running shoes","ua velocity 3 running shoes","running shoes for men","white running shoes","surge 3 running shoes","black running shoes"];
   return (
-    <div style={{position:"fixed",inset:0,zIndex:300,display:"flex",flexDirection:"column"}}>
-      {/* Search bar row — replaces nav visually */}
-      <div style={{background:"#000",padding:"0 24px",height:60,display:"flex",alignItems:"center",gap:12,borderBottom:"1px solid #222"}}>
-        <div style={{flex:1,display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,0.12)",borderRadius:4,padding:"7px 14px"}}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input
-            ref={inputRef}
-            value={q}
-            onChange={e=>setQ(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder="Search UA"
-            style={{flex:1,background:"transparent",border:"none",outline:"none",color:"#fff",fontSize:14}}
-          />
-          {q && <span onClick={()=>setQ("")} style={{color:"#888",cursor:"pointer",fontSize:18,lineHeight:1}}>×</span>}
-        </div>
-        <span onClick={onClose} style={{color:"#aaa",fontSize:14,cursor:"pointer",padding:"0 8px",whiteSpace:"nowrap"}}>Cancel</span>
-      </div>
-      {/* Drawer content */}
-      <div style={{background:"#fff",flex:1,overflowY:"auto"}}>
+    <>
+      {/* overlay behind drawer but below nav */}
+      <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.4)",zIndex:150}} onClick={onClose}/>
+      {/* drawer itself — sits below nav */}
+      <div style={{position:"fixed",top:112,left:0,right:0,zIndex:160,background:"#fff",boxShadow:"0 8px 32px rgba(0,0,0,0.15)",maxHeight:"calc(100vh - 112px)",overflowY:"auto"}}>
         <div style={{maxWidth:1200,margin:"0 auto",padding:"24px 32px",display:"flex",gap:40}}>
+          {/* Products */}
           <div style={{flex:1}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
               <span style={{fontWeight:600,fontSize:14,color:"#111"}}>Top Products</span>
-              <span onClick={onNavigate} style={{fontSize:13,color:UA_RED,cursor:"pointer",fontWeight:500}}>See All Results</span>
+              <span style={{fontSize:13,color:UA_RED,cursor:"pointer",fontWeight:500}}>See All Results</span>
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16,marginBottom:24}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
               {topProducts.map((p,i)=>(
-                <div key={i} style={{cursor:"pointer"}} onClick={onNavigate}>
+                <div key={i} style={{cursor:"pointer"}}>
                   <div style={{background:"#f5f5f5",borderRadius:4,height:160,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:8,overflow:"hidden"}}>
                     <img src={p.img} alt={p.name} style={{height:140,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
                   </div>
+                  <div style={{fontSize:11,color:"#999",marginBottom:2}}>{p.colors} Colors</div>
                   <div style={{fontSize:13,fontWeight:500,color:"#111"}}>{p.name}</div>
                   <div style={{fontSize:12,color:"#666",marginBottom:4}}>{p.sub}</div>
-                  <div style={{fontSize:13}}>{p.price} <span style={{textDecoration:"line-through",color:"#999"}}>{p.was}</span></div>
+                  <div style={{fontSize:13,color:"#111"}}>{p.price} <span style={{textDecoration:"line-through",color:"#999"}}>{p.was}</span></div>
                 </div>
               ))}
             </div>
-            <div style={{background:"#1a1a1a",borderRadius:4,padding:"20px 24px",cursor:"pointer"}} onClick={onNavigate}>
+            {/* Article teaser */}
+            <div style={{marginTop:24,background:"#1a1a1a",borderRadius:4,padding:"20px 24px"}}>
               <div style={{fontSize:18,fontWeight:700,color:"#fff",marginBottom:6}}>How to Choose the Best Running Shoes</div>
               <div style={{fontSize:13,color:"#aaa",lineHeight:1.6}}>So, you've committed to taking your running to the next level. Whatever your goals, you're going to need to find the best running shoes for your situation.</div>
             </div>
           </div>
+          {/* Suggestions */}
           <div style={{width:220,flexShrink:0}}>
             <div style={{fontWeight:600,fontSize:14,color:"#111",marginBottom:16}}>Suggested</div>
             {suggestions.map((s,i)=>(
-              <div key={i} onClick={onNavigate} style={{fontSize:13,color:"#333",padding:"8px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>{s}</div>
+              <div key={i} style={{fontSize:13,color:"#333",padding:"6px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>{s}</div>
             ))}
           </div>
         </div>
       </div>
-      {/* Dim overlay below drawer — clicking closes it */}
-      <div style={{background:"rgba(0,0,0,0.4)",flex:"0 0 0"}} onClick={onClose}/>
+    </>
+  );
+}
+
+/* ─── CLP ARTICLE ───────────────────────────────────────────────────────────── */
+function CLPPage() {
+  return (
+    <div style={{fontFamily:"Inter,sans-serif",color:"#333"}}>
+      {/* Hero */}
+      <div style={{position:"relative",height:380,background:"linear-gradient(135deg,#0d1b2e 0%,#1a3a5c 60%,#2a5080 100%)",overflow:"hidden",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",padding:32}}>
+        <div style={{position:"absolute",inset:0,backgroundImage:"url(https://underarmour.scene7.com/is/image/Underarmour/SS26_Q1_Velociti_Elite3_Launch_COG_ATT_CLP_Hero_1_1)",backgroundSize:"cover",backgroundPosition:"center",opacity:.65}}/>
+        <div style={{position:"relative",textAlign:"right"}}>
+          <div style={{color:"#fff",fontSize:48,fontWeight:900,letterSpacing:-2,lineHeight:1}}>VELOCITI</div>
+          <div style={{color:"rgba(255,255,255,0.7)",fontSize:11,letterSpacing:2,marginTop:4}}>ENGINEERED BY SHARON LOKEDI</div>
+        </div>
+      </div>
+      <div style={{maxWidth:860,margin:"0 auto",padding:"40px 24px 80px"}}>
+        <div style={{fontSize:12,color:"#999",marginBottom:24}}>Discover › Blog › How to Choose the Best Running Shoes</div>
+        <h1 style={{fontSize:38,fontWeight:900,marginBottom:16,lineHeight:1.1,color:"#111"}}>How to Choose the Best Running Shoes</h1>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>So, you've committed to taking your running to the next level. It could be your first 5k. You might be building towards a marathon. Or you're focused on everyday running for health and fitness. Whatever your goals, you're going to need to find the best running shoes for your situation.</p>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>There is a lot of choice out there when it comes to choosing running footwear, so how do you find the best running shoes for you? Ultimately, choosing the right pair depends on a number of factors, including:</p>
+        <ul style={{fontSize:15,lineHeight:2.2,marginBottom:20,paddingLeft:24}}>
+          <li>The kind of running you do</li><li>What surface you run on</li><li>Your running goals</li><li>Your experience level</li>
+        </ul>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:32}}>In this guide, you'll learn more about why running shoes are important and what factors you should consider when choosing a pair. You'll also find examples of the best running shoes for different needs.</p>
+
+        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Why purpose-built running shoes are so important</h2>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>Head to a sports gear shop, and you'll find hundreds of kinds of shoes with different features and designs. So what makes running shoes different, and why is it important to choose purpose-built running footwear — rather than more general sport or training shoes?</p>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>Running shoes are built specifically for how your body moves when running. That sounds obvious, but this influences several key characteristics of their design:</p>
+        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
+          <li style={{marginBottom:10}}><strong>Cushioning:</strong> Most running shoes place most of their cushioning in the rear. This is because your feet mainly strike the ground on the heel when running. Compare a running shoe with, say, a golf shoe — cushioning in a golf shoe is distributed more evenly across the sole, since golfers shift their weight side to side, backwards and forwards. But when you're running, you're mainly striking the ground with your heel in the same place, over and again.</li>
+          <li style={{marginBottom:10}}><strong>Direction of travel:</strong> If you look at the tread on running footwear, you'll see that it follows a one-directional pattern since your feet follow the same motion throughout the running motion. Compare that to the soles of basketball shoes — they have grip going in multiple directions to help with side-to-side movements.</li>
+          <li><strong>Weight:</strong> Running shoes are among the lightest kinds of footwear out there. Each shoe is designed slightly differently, but they all use extremely lightweight materials which allow you to move as easily as possible.</li>
+        </ul>
+
+        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Factors to consider when buying running shoes</h2>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>There are plenty of different kinds of running footwear out there, all of which are designed for specific needs. To help you narrow down your search, think about the following factors when looking for your next pair.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>1. Running surface</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>What kind of surface do you plan to run on? There are different sorts of shoes built for different kinds of surfaces. They basically fall into two categories:</p>
+        <h4 style={{fontSize:16,fontWeight:700,marginBottom:6,marginTop:16}}>Road running shoes</h4>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>If you mainly run on smooth but hard surfaces like asphalt or tarmac you'll want footwear that prioritises cushioning in the heel area, and which has a very tough tread to handle the friction from the road surface. These shoes also tend to be the go-to choice for treadmill running. UA Infinite Elite for men and women: Crank it up in shoes that feel responsive from the very first stride — tons of spring, soft UA HOVR+ cushioning to keep your legs feeling fresh so you can go the distance.</p>
+        <h4 style={{fontSize:16,fontWeight:700,marginBottom:6,marginTop:16}}>Trail running shoes</h4>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Run on muddy, stony, uneven surfaces? Then a trail running shoe is ideal. They have chunky lugs on the soles, which give you extra grip. They often have cushioning along the entire sole, since you'll be running on unstable surfaces. UA Bandit Trail 3 for men and women: Specially built for trail running, with crazy cushioning, traction that grips even muddy terrain, and the extra protection trail runners need to keep going.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>2. Your running goals</h3>
+        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
+          <li style={{marginBottom:10}}><strong>Distance:</strong> As a rule of thumb, the longer the distance you cover, the more cushioning you'll want. Someone training for a marathon will need more cushioning than someone doing 3k on a treadmill. UA Infinite Running Shoes: Built insanely light and supportive, paired with soft, springy UA HOVR+ cushioning.</li>
+          <li style={{marginBottom:10}}><strong>Speed:</strong> If smashing a PB is your goal, the best carbon plate running shoes use advanced technology to help propel you forward. UA Flow Velociti: A full-length, carbon fiber plate adds propulsion, while rubberless UA Flow cushioning makes it light and grippy.</li>
+          <li><strong>Competitive vs casual:</strong> The best everyday running shoes are solid all-rounders — perfect for regular, short to mid-distance runs. Competitive running shoes tend to have more specialised features for speed, cushioning or different surfaces.</li>
+        </ul>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>3. Your pronation</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>Pronation is a technical term that describes the movement of your feet when they strike the ground. There are three kinds of pronation:</p>
+        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
+          <li style={{marginBottom:10}}><strong>Neutral:</strong> In neutral pronation, the outside of the heel comes into contact with the ground first, while your toes are still pointing up. The foot then rolls in and most of the side of your foot comes into contact with the ground. You then push off with your front foot — with most of your toes pushing away.</li>
+          <li style={{marginBottom:10}}><strong>Overpronation:</strong> Your foot rolls inward excessively. Most of your weight is on the inside of your foot. People who overpronate often have low arches or flat feet.</li>
+          <li><strong>Underpronation (supination):</strong> Your foot doesn't roll in enough, and most of your weight is carried on the outside. You push off the ground with your smaller toes. People who supinate often have high arches.</li>
+        </ul>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:20}}>The majority of people have a neutral running pattern and will be fine with neutral running shoes. But if you overpronate or underpronate, consider choosing a pair of stability running shoes — they offer extra support and cushioning in the midfoot to help reduce strain.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>4. The general conditions you run in</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:20}}>Tend to run in hot places? You'll want super breathable shoes. Found the streets of a rainy city? You'll want something that's water resistant. Live in a cool climate? Insulated running shoes are the way to go. Running in areas with low light? Our UA Infinite Pro 2 Running Shoe features 360° reflectivity for added visibility.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>5. Your age</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:32}}>Kids and youth runners have slightly different needs to adult runners. Since they weigh less than adults, youth shoes use lighter materials and don't need to offer the same levels of cushioning.</p>
+
+        <h2 style={{fontSize:28,fontWeight:800,marginBottom:16,marginTop:40,color:"#111"}}>The best running shoes for different needs</h2>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>Best running shoes for beginners</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Just started your running journey? UA Infinite running shoes give you lightweight, flexible and cushioned running gear. The key is the use of our unique HOVR cushioning — it absorbs the impact of every footstrike while generating energy return, helping you spring forward with every step.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best neutral running shoes</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Neutral running shoes give you more cushioning in the rearfoot, and have a flexible mid and front foot so you can flex your feet and push off with maximum ground contact. UA Sonic 7 running shoes for men and women are incredibly light and supportive, featuring our unique HOVR cushioning.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best trail running shoes</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Trail running shoes need to give you tough grip, water resistant uppers, and serious cushioning. UA Bandit Trail 3 running shoes give you everything you need to take on the toughest off-road adventures — massively durable outsoles, a super responsive Charged Cushioning® midsole and a breathable mesh upper.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best running shoes for speed</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Looking to smash your PB? Our best carbon plate running shoes for speed include the New York marathon-winning UA Flow Velociti Elite. A full-length, carbon fiber plate for incredible propulsion, combined with our rubberless UA Flow cushioning and outsole system.</p>
+
+        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best marathon running shoes</h3>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Grinding for 26.2 miles is incredibly tough. Men's and women's UA Infinite Elite Marathon Shoes offer incredible, lightweight support mile after mile — ultra springy UA HOVR cushioning, super breathable uppers, and a heel collar for added comfort and lockdown.</p>
+
+        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Under Armour: building some of the world's best running shoes</h2>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>At Under Armour, we're continually innovating to build the world's best running shoes — from innovative carbon plate technology to UA HOVR™ cushioning that is more durable than traditional foams, everything about our running shoes is made to give you an edge.</p>
+        <p style={{fontSize:15,lineHeight:1.8,marginBottom:0}}>Discover some of the best running shoes for men, women and kids. Or for help narrowing down your search, use our shoe finder tool.</p>
+        <div style={{textAlign:"center",marginTop:40,paddingTop:24,borderTop:"1px solid #eee",fontSize:12,color:"#999"}}>Back to full blog</div>
+      </div>
     </div>
   );
 }
 
-/* ─── CLP PAGE ──────────────────────────────────────────────────────────────── */
-function CLPPage() {
-  const shoeCard = (name, tag, sub, img, imgBg="#f5f5f5") => (
-    <div style={{textAlign:"center"}}>
-      <div style={{background:imgBg,borderRadius:4,height:180,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:10,overflow:"hidden"}}>
-        <img src={img} alt={name} style={{maxHeight:160,maxWidth:"90%",objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
+/* ─── SHOE IMAGE with fallback ──────────────────────────────────────────────── */
+function ShoeImage({ shoe, height=210, imgHeight=190 }) {
+  const [failed, setFailed] = useState(false);
+  // Try alternate URL patterns on error
+  const urls = [shoe.img].filter(Boolean);
+  const [urlIdx, setUrlIdx] = useState(0);
+
+  if (failed || !shoe.img) {
+    return (
+      <div style={{background:"#f0f0f0",height,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6}}>
+        <div style={{fontSize:32}}>👟</div>
+        <div style={{fontSize:11,color:"#999",textAlign:"center",padding:"0 8px"}}>{shoe.name}</div>
       </div>
-      <div style={{fontSize:13,fontWeight:600,color:"#111",marginBottom:2}}>{name}</div>
-      {tag && <div style={{fontSize:11,color:"#888",textTransform:"uppercase",letterSpacing:.5,marginBottom:2}}>{tag}</div>}
-      {sub && <div style={{fontSize:11,color:"#aaa"}}>{sub}</div>}
-    </div>
-  );
-
-  const lookImg = (src, label) => (
-    <div style={{position:"relative",overflow:"hidden",borderRadius:2}}>
-      <div style={{background:"#1a1a1a",height:320,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
-        <img src={src} alt={label} style={{width:"100%",height:"100%",objectFit:"cover",opacity:.85}} onError={e=>{e.target.style.background="#222",e.target.style.display="none"}}/>
-      </div>
-    </div>
-  );
-
-  const faqs = [
-    "What are the best running shoes for hill repeats?",
-    "What are the best running shoes for long-distance comfort?",
-    "What are the best running shoes with stability support?",
-    "What features improve long-distance running comfort?",
-    "How can I balance cushioning and responsiveness for speed?",
-    "What's new in the latest Velociti Collection?",
-  ];
-
+    );
+  }
   return (
-    <div style={{fontFamily:"Inter,sans-serif",color:"#111",background:"#fff"}}>
-
-      {/* ── HERO ── */}
-      <div style={{width:"100%",maxHeight:480,overflow:"hidden",position:"relative"}}>
-        <img src="/images/hero.jpeg" alt="Velociti Collection" style={{width:"100%",objectFit:"cover",objectPosition:"center 30%",display:"block",maxHeight:480}}/>
-      </div>
-
-      {/* ── SALE STRIP ── */}
-      <div style={{background:"#f5f5f5",textAlign:"center",padding:"10px 0",fontSize:13,fontWeight:500}}>
-        SALE: Up to 50% Off. <span style={{color:UA_RED,fontWeight:700,cursor:"pointer",textDecoration:"underline"}}>SHOP NOW</span>
-      </div>
-
-      {/* ── COLLECTION HEADER ── */}
-      <div style={{textAlign:"center",padding:"48px 24px 32px",maxWidth:700,margin:"0 auto"}}>
-        <div style={{fontSize:13,fontWeight:600,letterSpacing:2,textTransform:"uppercase",color:"#888",marginBottom:8}}>Velociti Collection</div>
-        <h1 style={{fontSize:36,fontWeight:900,letterSpacing:-1,lineHeight:1.1,marginBottom:16,textTransform:"uppercase"}}>A Complete Race-Day System</h1>
-        <p style={{fontSize:15,lineHeight:1.75,color:"#444",marginBottom:12}}>Lightweight tops that reduce friction. Breathable, stretchy shorts that move with you. Running shoes engineered for performance. From short sprints to long distances, Velociti is built head to toe to perform when it counts.</p>
-        <p style={{fontSize:14,fontWeight:600,letterSpacing:.5}}>Race-Day starts here.</p>
-      </div>
-
-      {/* ── LOOKS FOR RACE DAY ── */}
-      <div style={{padding:"0 40px 48px",maxWidth:1200,margin:"0 auto",boxSizing:"border-box"}}>
-        <h2 style={{fontSize:20,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:24,borderTop:"2px solid #111",paddingTop:20}}>Looks for Race Day</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,marginBottom:24}}>
-          {lookImg("/images/hero.jpeg","Race day look 1")}
-          {lookImg("/images/hero.jpeg","Race day look 2")}
-          {lookImg("/images/hero.jpeg","Race day look 3")}
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,fontSize:12,color:"#555"}}>
-          <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Elite Singlet</div><div>Velociti Elite Shorts</div><div style={{fontWeight:600,marginTop:4}}>Velociti Elite 3 Shoes</div></div>
-          <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Short Sleeve</div><div>HeatGear® Mesh Shorts</div><div style={{fontWeight:600,marginTop:4}}>Velociti Distance Shoes</div></div>
-          <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Short Sleeve</div><div>Vanish Elite Shorts</div><div style={{fontWeight:600,marginTop:4}}>Velociti Distance Shoes</div></div>
-        </div>
-      </div>
-
-      {/* ── BUILT FOR SPEED ── */}
-      <div style={{background:"#f7f7f7",padding:"48px 40px",maxWidth:"100%",boxSizing:"border-box"}}>
-        <div style={{maxWidth:1200,margin:"0 auto"}}>
-          <h2 style={{fontSize:20,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:32,borderTop:"2px solid #111",paddingTop:20}}>Built for Speed</h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24}}>
-            <div style={{textAlign:"center"}}>
-              <div style={{background:"#fff",borderRadius:4,height:200,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,padding:16}}>
-                <img src="/images/lokedi.png" alt="Velociti Elite 3" style={{maxHeight:180,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
-              <div style={{fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:4}}>For Race Day</div>
-              <div style={{fontSize:16,fontWeight:800,marginBottom:4}}>Velociti Elite 3</div>
-              <p style={{fontSize:12,color:"#555",lineHeight:1.6,marginBottom:10}}>Maximum propulsion and turnover. Pinnacle race day experience.</p>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Now</span>
-            </div>
-            <div style={{textAlign:"center"}}>
-              <div style={{background:"#fff",borderRadius:4,height:200,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,padding:16}}>
-                <img src={SHOES.spd.img} alt="Velociti Pro 2" style={{maxHeight:180,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
-              <div style={{fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:4}}>For Race Day Prep</div>
-              <div style={{fontSize:16,fontWeight:800,marginBottom:4}}>Velociti Pro 2</div>
-              <p style={{fontSize:12,color:"#555",lineHeight:1.6,marginBottom:10}}>Speed, durability, and stability for miles. Training partner to the elite.</p>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Now</span>
-            </div>
-            <div style={{textAlign:"center"}}>
-              <div style={{background:"#fff",borderRadius:4,height:200,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,padding:16}}>
-                <img src={SHOES.pace.img} alt="Velociti SPD" style={{maxHeight:180,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
-              <div style={{fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:4}}>For Uninhibited Speed</div>
-              <div style={{fontSize:16,fontWeight:800,marginBottom:4}}>Velociti SPD</div>
-              <p style={{fontSize:12,color:"#555",lineHeight:1.6,marginBottom:10}}>Natural, soft underfoot feel.</p>
-              <div style={{display:"flex",gap:12,justifyContent:"center"}}>
-                <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Women</span>
-                <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Men</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── BUILT FOR DISTANCE ── */}
-      <div style={{padding:"48px 40px",maxWidth:1200,margin:"0 auto",boxSizing:"border-box"}}>
-        <h2 style={{fontSize:20,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:32,borderTop:"2px solid #111",paddingTop:20}}>Built for Distance</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:32}}>
-          <div>
-            <div style={{background:"#f7f7f7",borderRadius:4,height:240,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,padding:16}}>
-              <img src={SHOES.distance.img} alt="Velociti Distance" style={{maxHeight:220,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-            </div>
-            <div style={{fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:4}}>For Long Runs</div>
-            <div style={{fontSize:20,fontWeight:800,marginBottom:8}}>Velociti Distance</div>
-            <p style={{fontSize:13,color:"#555",lineHeight:1.7,marginBottom:12}}>Soft and snappy HOVR+™ superfoam balances responsiveness and stability to make quick work of every mile.</p>
-            <div style={{display:"flex",gap:12}}>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Women</span>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Men</span>
-            </div>
-          </div>
-          <div>
-            <div style={{background:"#f7f7f7",borderRadius:4,height:240,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,padding:16}}>
-              <img src={SHOES.pace.img} alt="Velociti Pace" style={{maxHeight:220,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
-            </div>
-            <div style={{fontSize:11,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:4}}>For Everyday Distance</div>
-            <div style={{fontSize:20,fontWeight:800,marginBottom:8}}>Velociti Pace</div>
-            <p style={{fontSize:13,color:"#555",lineHeight:1.7,marginBottom:12}}>The ultimate shoe for speeding up your daily miles, with snappy HOVR™ foam for energy return and a light, stable fit for consistent speed and comfort.</p>
-            <div style={{display:"flex",gap:12}}>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Women</span>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Men</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── SHOP THE LOOK ── */}
-      <div style={{background:"#f7f7f7",padding:"48px 40px",boxSizing:"border-box"}}>
-        <div style={{maxWidth:1200,margin:"0 auto"}}>
-          <h2 style={{fontSize:20,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:24,borderTop:"2px solid #111",paddingTop:20}}>Shop the Look</h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
-            {["Shop Men's Running","Shop Women's Running","Shop Shoes","Shop Accessories"].map((label,i)=>(
-              <div key={i} style={{position:"relative",overflow:"hidden",borderRadius:2,cursor:"pointer"}}>
-                <div style={{background:"#1a1a1a",height:260,display:"flex",alignItems:"flex-end",padding:16}}>
-                  <img src="/images/hero.jpeg" alt={label} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:.6}} onError={e=>{e.target.style.display="none"}}/>
-                  <span style={{position:"relative",color:"#fff",fontSize:13,fontWeight:600,textDecoration:"underline"}}>{label}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── VELOCITI BANNER ── */}
-      <div style={{background:"#111",padding:"48px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-        <img src="/images/hero.jpeg" alt="Velociti" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:.25}} onError={e=>{e.target.style.display="none"}}/>
-        <div style={{position:"relative",fontSize:72,fontWeight:900,color:"#c8102e",letterSpacing:-2,lineHeight:1}}>VELOCITI</div>
-      </div>
-
-      {/* ── FIND YOUR SHOE ── */}
-      <div style={{padding:"56px 40px",textAlign:"center",maxWidth:1200,margin:"0 auto",boxSizing:"border-box"}}>
-        <h2 style={{fontSize:24,fontWeight:800,textTransform:"uppercase",letterSpacing:.5,marginBottom:8}}>Find the Best Running Shoe for You</h2>
-        <button style={{background:UA_BLACK,color:"#fff",border:"none",padding:"12px 32px",fontSize:14,fontWeight:600,borderRadius:2,cursor:"pointer",marginBottom:48,letterSpacing:.5}}>Take the Quiz</button>
-
-        {/* Editorial cards */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24,marginBottom:48,textAlign:"left"}}>
-          {[
-            {tag:"Fitness Advice",title:"How to Train for a Marathon",desc:"Our marathon training playbook covers everything from grit and determination to building a solid running schedule."},
-            {tag:"Buying Guide",title:"How to Choose the Best Running Marathon Shoes",desc:"Learn how to choose marathon running shoes based on gait, road surface, and key performance features."},
-            {tag:"Fitness Advice",title:"Stretches for Runners: Warm ups and Cool-downs",desc:"Discover the essential stretches every runner should include in their warm-up & cool-down routine."},
-          ].map((c,i)=>(
-            <div key={i}>
-              <div style={{background:"#f0f0f0",height:180,borderRadius:2,marginBottom:12,overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                <img src="/images/hero.jpeg" alt={c.title} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
-              <div style={{fontSize:11,fontWeight:600,color:UA_RED,textTransform:"uppercase",letterSpacing:1,marginBottom:6}}>{c.tag}</div>
-              <div style={{fontSize:14,fontWeight:700,marginBottom:6,lineHeight:1.4}}>{c.title}</div>
-              <p style={{fontSize:12,color:"#666",lineHeight:1.6,marginBottom:8}}>{c.desc}</p>
-              <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Read Here</span>
-            </div>
-          ))}
-        </div>
-
-        {/* FAQs */}
-        <div style={{textAlign:"left",borderTop:"1px solid #eee",paddingTop:32}}>
-          {faqs.map((q,i)=>(
-            <div key={i} style={{padding:"14px 0",borderBottom:"1px solid #eee",fontSize:14,color:"#333",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              {q}<span style={{color:"#999",fontSize:18}}>›</span>
-            </div>
-          ))}
-          <div style={{textAlign:"center",marginTop:24}}>
-            <span style={{fontSize:13,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>View All FAQs</span>
-          </div>
-        </div>
-      </div>
-
-      <Footer/>
-
+    <div style={{background:"#f7f7f7",height,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <img
+        src={urlIdx < urls.length ? urls[urlIdx] : urls[0]}
+        alt={shoe.name}
+        style={{maxHeight:imgHeight,maxWidth:"100%",objectFit:"contain"}}
+        onError={()=>{ if(urlIdx < urls.length-1) setUrlIdx(i=>i+1); else setFailed(true); }}
+      />
     </div>
   );
 }
@@ -678,7 +587,8 @@ function Footer() {
 /* ─── MAIN APP ───────────────────────────────────────────────────────────────── */
 export default function App() {
   const [page, setPage]                   = useState("clp");
-  const [showSearch, setShowSearch]       = useState(false);
+  const [searchActive, setSearchActive]   = useState(false);
+  const [searchQuery, setSearchQuery]     = useState("");
   const [messages, setMessages]           = useState([{ from:"zoe", text:STEPS[0].text, chips:STEPS[0].chips }]);
   const [scriptStep, setScriptStep]       = useState(0);
   const [filterTags, setFilterTags]       = useState([]);
@@ -772,15 +682,22 @@ export default function App() {
 
   /* search submit */
   const handleSearchSubmit = () => {
-    setShowSearch(false);
-    setPage("plp");
+    if(searchQuery.toLowerCase().includes("running")||searchQuery.trim().length>0) {
+      setSearchActive(false); setPage("plp");
+    }
   };
 
   return (
     <div style={{fontFamily:"Inter,sans-serif",background:"#fff",minHeight:"100vh"}}>
-      <Nav onSearchClick={()=>setShowSearch(true)}/>
+      <Nav
+        onSearchFocus={()=>setSearchActive(true)}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onSearchSubmit={handleSearchSubmit}
+        searchActive={searchActive}
+      />
 
-      {showSearch && <SearchModal onClose={()=>setShowSearch(false)} onNavigate={handleSearchSubmit}/>}
+      {searchActive && <SearchDrawer query={searchQuery} onClose={()=>setSearchActive(false)} onSubmit={handleSearchSubmit}/>}
 
       {page==="clp" && <CLPPage/>}
 
