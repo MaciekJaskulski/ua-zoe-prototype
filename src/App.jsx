@@ -107,7 +107,7 @@ const STEPS = [
 ];
 
 /* ─── NAV ───────────────────────────────────────────────────────────────────── */
-function Nav({ searchQuery, setSearchQuery, onSearchSubmit, onSearchIconClick }) {
+function Nav({ onSearchClick }) {
   return (
     <div style={{position:"sticky",top:0,zIndex:200,fontFamily:"Inter,sans-serif"}}>
       <div style={{background:"#000",textAlign:"center",padding:"7px 0",fontSize:12,color:"#bbb",letterSpacing:.4,position:"relative"}}>
@@ -123,9 +123,9 @@ function Nav({ searchQuery, setSearchQuery, onSearchSubmit, onSearchIconClick })
             <span key={l} style={{color:"#fff",fontSize:13,fontWeight:500,letterSpacing:.3,cursor:"default"}}>{l}</span>
           ))}
         </div>
-        <div onClick={onSearchIconClick} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"pointer"}}>
+        <div onClick={onSearchClick} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"pointer"}}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <span style={{color:"#888",fontSize:13}}>{searchQuery || "Search UA"}</span>
+          <span style={{color:"#666",fontSize:13}}>Search UA</span>
         </div>
         <div style={{display:"flex",gap:16}}>
           <span style={{color:"#aaa",fontSize:18,cursor:"pointer"}}>♡</span>
@@ -139,77 +139,79 @@ function Nav({ searchQuery, setSearchQuery, onSearchSubmit, onSearchIconClick })
   );
 }
 
-/* ─── SEARCH DRAWER ─────────────────────────────────────────────────────────── */
-function SearchDrawer({ onClose, onNavigate }) {
-  const [localQ, setLocalQ] = useState("");
-  const topProducts=[
-    {name:"UA Halo Runner",     sub:"Men's Running Shoes",   price:"£87.97",was:"£125", colors:4, img:SHOES.charged.img},
-    {name:"UA Halo Runner SE",  sub:"Men's Running Shoes",   price:"£67.97",was:"£135", colors:6, img:SHOES.haloSE.img},
-    {name:"UA Halo Runner",     sub:"Women's Running Shoes", price:"£87.97",was:"£125", colors:2, img:SHOES.haloRacer.img},
-    {name:"UA Velociti Pace",   sub:"Women's Running Shoes. Daily Miles, Lightweight", price:"£79.97",was:"£100", colors:3, img:SHOES.pace.img},
+/* ─── SEARCH MODAL ───────────────────────────────────────────────────────────── */
+function SearchModal({ onClose, onNavigate }) {
+  const [q, setQ] = useState("");
+  const inputRef = useRef(null);
+  useEffect(() => { inputRef.current?.focus(); }, []);
+
+  const suggestions = ["women running shoes","trail running shoes","kids running shoes","ua velocity 3 running shoes","running shoes for men","white running shoes","surge 3 running shoes","black running shoes"];
+  const topProducts = [
+    { name:"UA Halo Runner",    sub:"Men's Running Shoes",   price:"£87.97", was:"£125", img:SHOES.charged.img },
+    { name:"UA Halo Runner SE", sub:"Men's Running Shoes",   price:"£67.97", was:"£135", img:SHOES.haloSE.img },
+    { name:"UA Halo Runner",    sub:"Women's Running Shoes", price:"£87.97", was:"£125", img:SHOES.haloRacer.img },
+    { name:"UA Velociti Pace",  sub:"Women's Running Shoes. Daily Miles, Lightweight", price:"£79.97", was:"£100", img:SHOES.pace.img },
   ];
-  const suggestions=["women running shoes","trail running shoes","kids running shoes","ua velocity 3 running shoes","running shoes for men","white running shoes","surge 3 running shoes","black running shoes"];
+
+  const handleKey = (e) => {
+    if (e.key === "Enter" && q.trim()) { onNavigate(); }
+    if (e.key === "Escape") { onClose(); }
+  };
+
   return (
-    <>
-      {/* overlay behind drawer but below nav */}
-      <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.4)",zIndex:150}} onClick={onClose}/>
-      {/* drawer itself — sits below nav */}
-      <div style={{position:"fixed",top:112,left:0,right:0,zIndex:160,background:"#fff",boxShadow:"0 8px 32px rgba(0,0,0,0.15)",maxHeight:"calc(100vh - 112px)",overflowY:"auto"}}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"20px 32px 24px"}}>
-          {/* Search input inside drawer */}
-          <div style={{display:"flex",gap:12,marginBottom:24,alignItems:"center"}}>
-            <div style={{flex:1,display:"flex",alignItems:"center",gap:10,border:"2px solid #111",borderRadius:4,padding:"10px 16px",background:"#fff"}}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input
-                autoFocus
-                value={localQ}
-                onChange={e=>setLocalQ(e.target.value)}
-                onKeyDown={e=>{ if(e.key==="Enter" && localQ.trim()) onNavigate(); if(e.key==="Escape") onClose(); }}
-                placeholder="Search UA"
-                style={{flex:1,border:"none",outline:"none",fontSize:15,color:"#111"}}
-              />
-              {localQ && <span onClick={()=>setLocalQ("")} style={{cursor:"pointer",color:"#999",fontSize:18,lineHeight:1}}>×</span>}
-            </div>
-            <button onClick={()=>{ if(localQ.trim()) onNavigate(); }} style={{background:UA_BLACK,color:"#fff",border:"none",padding:"11px 20px",fontSize:14,fontWeight:600,cursor:"pointer",borderRadius:4}}>Search</button>
-            <span onClick={onClose} style={{cursor:"pointer",fontSize:14,color:"#555",padding:"0 8px"}}>Cancel</span>
-          </div>
+    <div style={{position:"fixed",inset:0,zIndex:300,display:"flex",flexDirection:"column"}}>
+      {/* Search bar row — replaces nav visually */}
+      <div style={{background:"#000",padding:"0 24px",height:60,display:"flex",alignItems:"center",gap:12,borderBottom:"1px solid #222"}}>
+        <div style={{flex:1,display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,0.12)",borderRadius:4,padding:"7px 14px"}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={e=>setQ(e.target.value)}
+            onKeyDown={handleKey}
+            placeholder="Search UA"
+            style={{flex:1,background:"transparent",border:"none",outline:"none",color:"#fff",fontSize:14}}
+          />
+          {q && <span onClick={()=>setQ("")} style={{color:"#888",cursor:"pointer",fontSize:18,lineHeight:1}}>×</span>}
         </div>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 32px 24px",display:"flex",gap:40}}>
-          {/* Products */}
+        <span onClick={onClose} style={{color:"#aaa",fontSize:14,cursor:"pointer",padding:"0 8px",whiteSpace:"nowrap"}}>Cancel</span>
+      </div>
+      {/* Drawer content */}
+      <div style={{background:"#fff",flex:1,overflowY:"auto"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"24px 32px",display:"flex",gap:40}}>
           <div style={{flex:1}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
               <span style={{fontWeight:600,fontSize:14,color:"#111"}}>Top Products</span>
-              <span style={{fontSize:13,color:UA_RED,cursor:"pointer",fontWeight:500}}>See All Results</span>
+              <span onClick={onNavigate} style={{fontSize:13,color:UA_RED,cursor:"pointer",fontWeight:500}}>See All Results</span>
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16,marginBottom:24}}>
               {topProducts.map((p,i)=>(
-                <div key={i} style={{cursor:"pointer"}}>
+                <div key={i} style={{cursor:"pointer"}} onClick={onNavigate}>
                   <div style={{background:"#f5f5f5",borderRadius:4,height:160,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:8,overflow:"hidden"}}>
                     <img src={p.img} alt={p.name} style={{height:140,objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
                   </div>
-                  <div style={{fontSize:11,color:"#999",marginBottom:2}}>{p.colors} Colors</div>
                   <div style={{fontSize:13,fontWeight:500,color:"#111"}}>{p.name}</div>
                   <div style={{fontSize:12,color:"#666",marginBottom:4}}>{p.sub}</div>
-                  <div style={{fontSize:13,color:"#111"}}>{p.price} <span style={{textDecoration:"line-through",color:"#999"}}>{p.was}</span></div>
+                  <div style={{fontSize:13}}>{p.price} <span style={{textDecoration:"line-through",color:"#999"}}>{p.was}</span></div>
                 </div>
               ))}
             </div>
-            {/* Article teaser */}
-            <div style={{marginTop:24,background:"#1a1a1a",borderRadius:4,padding:"20px 24px"}}>
+            <div style={{background:"#1a1a1a",borderRadius:4,padding:"20px 24px",cursor:"pointer"}} onClick={onNavigate}>
               <div style={{fontSize:18,fontWeight:700,color:"#fff",marginBottom:6}}>How to Choose the Best Running Shoes</div>
               <div style={{fontSize:13,color:"#aaa",lineHeight:1.6}}>So, you've committed to taking your running to the next level. Whatever your goals, you're going to need to find the best running shoes for your situation.</div>
             </div>
           </div>
-          {/* Suggestions */}
           <div style={{width:220,flexShrink:0}}>
             <div style={{fontWeight:600,fontSize:14,color:"#111",marginBottom:16}}>Suggested</div>
             {suggestions.map((s,i)=>(
-              <div key={i} style={{fontSize:13,color:"#333",padding:"6px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>{s}</div>
+              <div key={i} onClick={onNavigate} style={{fontSize:13,color:"#333",padding:"8px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>{s}</div>
             ))}
           </div>
         </div>
       </div>
-    </>
+      {/* Dim overlay below drawer — clicking closes it */}
+      <div style={{background:"rgba(0,0,0,0.4)",flex:"0 0 0"}} onClick={onClose}/>
+    </div>
   );
 }
 
@@ -676,8 +678,7 @@ function Footer() {
 /* ─── MAIN APP ───────────────────────────────────────────────────────────────── */
 export default function App() {
   const [page, setPage]                   = useState("clp");
-  const [showDrawer, setShowDrawer]       = useState(false);
-  const [searchQuery, setSearchQuery]     = useState("");
+  const [showSearch, setShowSearch]       = useState(false);
   const [messages, setMessages]           = useState([{ from:"zoe", text:STEPS[0].text, chips:STEPS[0].chips }]);
   const [scriptStep, setScriptStep]       = useState(0);
   const [filterTags, setFilterTags]       = useState([]);
@@ -771,20 +772,15 @@ export default function App() {
 
   /* search submit */
   const handleSearchSubmit = () => {
-    setShowDrawer(false);
+    setShowSearch(false);
     setPage("plp");
   };
 
   return (
     <div style={{fontFamily:"Inter,sans-serif",background:"#fff",minHeight:"100vh"}}>
-      <Nav
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onSearchSubmit={handleSearchSubmit}
-        onSearchIconClick={()=>setShowDrawer(true)}
-      />
+      <Nav onSearchClick={()=>setShowSearch(true)}/>
 
-      {showDrawer && <SearchDrawer onClose={()=>setShowDrawer(false)} onNavigate={handleSearchSubmit}/>}
+      {showSearch && <SearchModal onClose={()=>setShowSearch(false)} onNavigate={handleSearchSubmit}/>}
 
       {page==="clp" && <CLPPage/>}
 
