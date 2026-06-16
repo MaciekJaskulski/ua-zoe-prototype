@@ -397,7 +397,7 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
   );
 
   return (
-    <div style={{width:260,minWidth:260,background:"#fff",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #e8e8e8",fontFamily:"Inter,sans-serif",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
+    <div style={{width:360,minWidth:360,background:"#fff",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #e8e8e8",fontFamily:"Inter,sans-serif",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
       {/* Header */}
       <div style={{padding:"16px 18px 14px",borderBottom:"1px solid #f0f0f0",display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:36,height:36,borderRadius:"50%",background:UA_RED,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#fff",fontSize:15,flexShrink:0,letterSpacing:-0.5}}>Z</div>
