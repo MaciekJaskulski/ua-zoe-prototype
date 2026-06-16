@@ -107,48 +107,31 @@ const STEPS = [
 ];
 
 /* ─── NAV ───────────────────────────────────────────────────────────────────── */
-function Nav({ onSearchFocus, searchQuery, setSearchQuery, onSearchSubmit, searchActive }) {
-  const inputRef = useRef(null);
-  useEffect(()=>{ if(searchActive && inputRef.current) inputRef.current.focus(); },[searchActive]);
+function Nav({ searchQuery, setSearchQuery, onSearchSubmit, onSearchIconClick }) {
   return (
     <div style={{position:"sticky",top:0,zIndex:200,fontFamily:"Inter,sans-serif"}}>
-      {/* Banner */}
-      <div style={{background:"#000",textAlign:"center",padding:"7px 0",fontSize:12,color:"#bbb",letterSpacing:.4}}>
+      <div style={{background:"#000",textAlign:"center",padding:"7px 0",fontSize:12,color:"#bbb",letterSpacing:.4,position:"relative"}}>
         FREE HOME DELIVERY OVER £50 | 60 DAYS RETURNS
         <span style={{position:"absolute",right:24,top:7,fontSize:12,color:"#bbb",display:"flex",gap:16}}>
           <span>Need Help?</span><span>🇬🇧 GB ▾</span><span>English</span><span>Register | Log In</span>
         </span>
       </div>
-      {/* Main row */}
       <div style={{background:"#000",display:"flex",alignItems:"center",padding:"0 24px",height:60,gap:32}}>
-        {/* Logo */}
         <svg width="36" height="36" viewBox="0 0 50 50" fill="white"><path d="M25 5 L5 20 L10 20 L10 35 L20 35 L20 22 L30 22 L30 35 L40 35 L40 20 L45 20 Z"/></svg>
-        {/* Nav links */}
         <div style={{display:"flex",gap:24,flex:1,justifyContent:"center"}}>
           {["Promotion","Men","Women","Kids","Sports","Discover","Outlet"].map(l=>(
             <span key={l} style={{color:"#fff",fontSize:13,fontWeight:500,letterSpacing:.3,cursor:"default"}}>{l}</span>
           ))}
         </div>
-        {/* Search */}
-        <div style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"text"}} onClick={()=>{ if(!searchActive) onSearchFocus(); }}>
+        <div onClick={onSearchIconClick} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.08)",borderRadius:4,padding:"6px 12px",width:220,cursor:"pointer"}}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input
-            ref={inputRef}
-            value={searchQuery}
-            onChange={e=>setSearchQuery(e.target.value)}
-            onFocus={onSearchFocus}
-            onKeyDown={e=>{ if(e.key==="Enter") onSearchSubmit(); }}
-            placeholder="Search UA"
-            style={{background:"transparent",border:"none",outline:"none",color:"#fff",fontSize:13,flex:1,"::placeholder":{color:"#888"}}}
-          />
-          {searchQuery && <span onClick={()=>setSearchQuery("")} style={{color:"#888",cursor:"pointer",fontSize:14}}>✕</span>}
+          <span style={{color:"#888",fontSize:13}}>{searchQuery || "Search UA"}</span>
         </div>
         <div style={{display:"flex",gap:16}}>
           <span style={{color:"#aaa",fontSize:18,cursor:"pointer"}}>♡</span>
           <span style={{color:"#aaa",fontSize:18,cursor:"pointer"}}>🛍</span>
         </div>
       </div>
-      {/* Sale strip */}
       <div style={{background:"#111",textAlign:"center",padding:"5px 0",fontSize:12,color:"#bbb",borderTop:"1px solid #222"}}>
         Early Access: Up to 50% off for Members.
       </div>
@@ -157,7 +140,8 @@ function Nav({ onSearchFocus, searchQuery, setSearchQuery, onSearchSubmit, searc
 }
 
 /* ─── SEARCH DRAWER ─────────────────────────────────────────────────────────── */
-function SearchDrawer({ query, onClose, onSubmit }) {
+function SearchDrawer({ onClose, onNavigate }) {
+  const [localQ, setLocalQ] = useState("");
   const topProducts=[
     {name:"UA Halo Runner",     sub:"Men's Running Shoes",   price:"£87.97",was:"£125", colors:4, img:SHOES.charged.img},
     {name:"UA Halo Runner SE",  sub:"Men's Running Shoes",   price:"£67.97",was:"£135", colors:6, img:SHOES.haloSE.img},
@@ -171,7 +155,26 @@ function SearchDrawer({ query, onClose, onSubmit }) {
       <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.4)",zIndex:150}} onClick={onClose}/>
       {/* drawer itself — sits below nav */}
       <div style={{position:"fixed",top:112,left:0,right:0,zIndex:160,background:"#fff",boxShadow:"0 8px 32px rgba(0,0,0,0.15)",maxHeight:"calc(100vh - 112px)",overflowY:"auto"}}>
-        <div style={{maxWidth:1200,margin:"0 auto",padding:"24px 32px",display:"flex",gap:40}}>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"20px 32px 24px"}}>
+          {/* Search input inside drawer */}
+          <div style={{display:"flex",gap:12,marginBottom:24,alignItems:"center"}}>
+            <div style={{flex:1,display:"flex",alignItems:"center",gap:10,border:"2px solid #111",borderRadius:4,padding:"10px 16px",background:"#fff"}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input
+                autoFocus
+                value={localQ}
+                onChange={e=>setLocalQ(e.target.value)}
+                onKeyDown={e=>{ if(e.key==="Enter" && localQ.trim()) onNavigate(); if(e.key==="Escape") onClose(); }}
+                placeholder="Search UA"
+                style={{flex:1,border:"none",outline:"none",fontSize:15,color:"#111"}}
+              />
+              {localQ && <span onClick={()=>setLocalQ("")} style={{cursor:"pointer",color:"#999",fontSize:18,lineHeight:1}}>×</span>}
+            </div>
+            <button onClick={()=>{ if(localQ.trim()) onNavigate(); }} style={{background:UA_BLACK,color:"#fff",border:"none",padding:"11px 20px",fontSize:14,fontWeight:600,cursor:"pointer",borderRadius:4}}>Search</button>
+            <span onClick={onClose} style={{cursor:"pointer",fontSize:14,color:"#555",padding:"0 8px"}}>Cancel</span>
+          </div>
+        </div>
+        <div style={{maxWidth:1200,margin:"0 auto",padding:"0 32px 24px",display:"flex",gap:40}}>
           {/* Products */}
           <div style={{flex:1}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
@@ -673,7 +676,7 @@ function Footer() {
 /* ─── MAIN APP ───────────────────────────────────────────────────────────────── */
 export default function App() {
   const [page, setPage]                   = useState("clp");
-  const [searchActive, setSearchActive]   = useState(false);
+  const [showDrawer, setShowDrawer]       = useState(false);
   const [searchQuery, setSearchQuery]     = useState("");
   const [messages, setMessages]           = useState([{ from:"zoe", text:STEPS[0].text, chips:STEPS[0].chips }]);
   const [scriptStep, setScriptStep]       = useState(0);
@@ -768,23 +771,20 @@ export default function App() {
 
   /* search submit */
   const handleSearchSubmit = () => {
-    if(searchQuery.trim().length>0) {
-      setSearchActive(false);
-      setTimeout(() => { setPage("plp"); }, 80);
-    }
+    setShowDrawer(false);
+    setPage("plp");
   };
 
   return (
     <div style={{fontFamily:"Inter,sans-serif",background:"#fff",minHeight:"100vh"}}>
       <Nav
-        onSearchFocus={()=>setSearchActive(true)}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         onSearchSubmit={handleSearchSubmit}
-        searchActive={searchActive}
+        onSearchIconClick={()=>setShowDrawer(true)}
       />
 
-      {searchActive && <SearchDrawer query={searchQuery} onClose={()=>setSearchActive(false)} onSubmit={handleSearchSubmit}/>}
+      {showDrawer && <SearchDrawer onClose={()=>setShowDrawer(false)} onNavigate={handleSearchSubmit}/>}
 
       {page==="clp" && <CLPPage/>}
 
