@@ -406,27 +406,7 @@ function CLPPage() {
         </div>
       </div>
 
-      {/* ── FOOTER ── */}
-      <div style={{background:"#fff",borderTop:"1px solid #eee",padding:"36px 40px",boxSizing:"border-box"}}>
-        <div style={{maxWidth:1200,margin:"0 auto",display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:28,marginBottom:28}}>
-          <div>
-            <div style={{fontWeight:700,marginBottom:10,fontSize:14}}>Stay in the loop.</div>
-            <div style={{display:"flex",gap:8,marginBottom:8}}>
-              <input placeholder="Email Address" style={{flex:1,border:"1px solid #ccc",padding:"8px 12px",fontSize:13,outline:"none"}}/>
-              <button style={{background:UA_BLACK,color:"#fff",border:"none",padding:"8px 16px",fontWeight:600,cursor:"pointer",fontSize:13}}>Submit</button>
-            </div>
-            <div style={{fontSize:11,color:"#999",marginBottom:12}}>By providing your email, you agree to the Terms & Conditions and Privacy Policy.</div>
-            <div style={{fontSize:12,fontWeight:600,marginBottom:6}}>Accepted Payment Methods</div>
-            <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-              {["VISA","MC","PayPal","AMEX","Apple Pay","Klarna"].map(p=><span key={p} style={{border:"1px solid #ccc",borderRadius:3,padding:"2px 7px",fontSize:11}}>{p}</span>)}
-            </div>
-          </div>
-          {[["Need Help?",["Help & FAQ","Size Guide","Shipping & Delivery","Returns","Store Locator","Order Tracking","Sitemap"]],["About Under Armour",["UA Blog","Affiliates","About UA","Sustainability","Careers","Student Discount","UK Tax Strategy"]],["UA Social",["📷 Instagram","👍 Facebook","✕ X","▶ Youtube"]]].map(([title,items])=>(
-            <div key={title}><div style={{fontWeight:700,marginBottom:10,fontSize:13}}>{title}</div>{items.map(l=><div key={l} style={{fontSize:12,color:"#555",marginBottom:5}}>{l}</div>)}</div>
-          ))}
-        </div>
-        <div style={{borderTop:"1px solid #eee",paddingTop:14,fontSize:11,color:"#999",maxWidth:1200,margin:"0 auto"}}>© 2026 Under Armour®, Inc. / Privacy Policy / Terms & Conditions / 3.9.1</div>
-      </div>
+      <Footer/>
 
     </div>
   );
@@ -788,8 +768,9 @@ export default function App() {
 
   /* search submit */
   const handleSearchSubmit = () => {
-    if(searchQuery.toLowerCase().includes("running")||searchQuery.trim().length>0) {
-      setSearchActive(false); setPage("plp");
+    if(searchQuery.trim().length>0) {
+      setSearchActive(false);
+      setTimeout(() => { setPage("plp"); }, 80);
     }
   };
 
