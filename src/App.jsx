@@ -212,88 +212,118 @@ function SearchDrawer({ query, onClose, onSubmit }) {
 
 /* ─── CLP ARTICLE ───────────────────────────────────────────────────────────── */
 function CLPPage() {
+  const faqs = [
+    "What are the best running shoes for hill repeats?",
+    "What are the best running shoes for long-distance comfort?",
+    "What are the best running shoes with stability support?",
+    "What features improve long-distance running comfort?",
+    "How can I balance cushioning and responsiveness for speed?",
+    "What's new in the latest Velociti Collection?",
+  ];
+
   return (
     <div style={{fontFamily:"Inter,sans-serif",color:"#333"}}>
-      {/* Hero */}
-      <div style={{position:"relative",height:380,background:"linear-gradient(135deg,#0d1b2e 0%,#1a3a5c 60%,#2a5080 100%)",overflow:"hidden",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",padding:32}}>
-        <div style={{position:"absolute",inset:0,backgroundImage:"url(https://underarmour.scene7.com/is/image/Underarmour/SS26_Q1_Velociti_Elite3_Launch_COG_ATT_CLP_Hero_1_1)",backgroundSize:"cover",backgroundPosition:"center",opacity:.65}}/>
-        <div style={{position:"relative",textAlign:"right"}}>
-          <div style={{color:"#fff",fontSize:48,fontWeight:900,letterSpacing:-2,lineHeight:1}}>VELOCITI</div>
-          <div style={{color:"rgba(255,255,255,0.7)",fontSize:11,letterSpacing:2,marginTop:4}}>ENGINEERED BY SHARON LOKEDI</div>
-        </div>
+
+      {/* ── HERO ── */}
+      <div style={{width:"100%",height:440,overflow:"hidden",position:"relative"}}>
+        <img src="/images/hero.jpeg" alt="Velociti Collection" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%",display:"block"}}/>
       </div>
+
+      {/* ── PAGE BODY ── */}
       <div style={{maxWidth:860,margin:"0 auto",padding:"40px 24px 80px"}}>
-        <div style={{fontSize:12,color:"#999",marginBottom:24}}>Discover › Blog › How to Choose the Best Running Shoes</div>
-        <h1 style={{fontSize:38,fontWeight:900,marginBottom:16,lineHeight:1.1,color:"#111"}}>How to Choose the Best Running Shoes</h1>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>So, you've committed to taking your running to the next level. It could be your first 5k. You might be building towards a marathon. Or you're focused on everyday running for health and fitness. Whatever your goals, you're going to need to find the best running shoes for your situation.</p>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>There is a lot of choice out there when it comes to choosing running footwear, so how do you find the best running shoes for you? Ultimately, choosing the right pair depends on a number of factors, including:</p>
-        <ul style={{fontSize:15,lineHeight:2.2,marginBottom:20,paddingLeft:24}}>
-          <li>The kind of running you do</li><li>What surface you run on</li><li>Your running goals</li><li>Your experience level</li>
-        </ul>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:32}}>In this guide, you'll learn more about why running shoes are important and what factors you should consider when choosing a pair. You'll also find examples of the best running shoes for different needs.</p>
 
-        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Why purpose-built running shoes are so important</h2>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>Head to a sports gear shop, and you'll find hundreds of kinds of shoes with different features and designs. So what makes running shoes different, and why is it important to choose purpose-built running footwear — rather than more general sport or training shoes?</p>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>Running shoes are built specifically for how your body moves when running. That sounds obvious, but this influences several key characteristics of their design:</p>
-        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
-          <li style={{marginBottom:10}}><strong>Cushioning:</strong> Most running shoes place most of their cushioning in the rear. This is because your feet mainly strike the ground on the heel when running. Compare a running shoe with, say, a golf shoe — cushioning in a golf shoe is distributed more evenly across the sole, since golfers shift their weight side to side, backwards and forwards. But when you're running, you're mainly striking the ground with your heel in the same place, over and again.</li>
-          <li style={{marginBottom:10}}><strong>Direction of travel:</strong> If you look at the tread on running footwear, you'll see that it follows a one-directional pattern since your feet follow the same motion throughout the running motion. Compare that to the soles of basketball shoes — they have grip going in multiple directions to help with side-to-side movements.</li>
-          <li><strong>Weight:</strong> Running shoes are among the lightest kinds of footwear out there. Each shoe is designed slightly differently, but they all use extremely lightweight materials which allow you to move as easily as possible.</li>
-        </ul>
+        {/* Sale strip */}
+        <div style={{background:"#f5f5f5",textAlign:"center",padding:"10px 0",fontSize:13,fontWeight:500,marginBottom:32,borderRadius:2}}>
+          SALE: Up to 50% Off. <span style={{color:UA_RED,fontWeight:700,cursor:"pointer",textDecoration:"underline"}}>SHOP NOW</span>
+        </div>
 
-        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Factors to consider when buying running shoes</h2>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>There are plenty of different kinds of running footwear out there, all of which are designed for specific needs. To help you narrow down your search, think about the following factors when looking for your next pair.</p>
+        {/* Collection header */}
+        <div style={{textAlign:"center",marginBottom:48}}>
+          <div style={{fontSize:12,fontWeight:600,letterSpacing:2,textTransform:"uppercase",color:"#888",marginBottom:8}}>Velociti Collection</div>
+          <h1 style={{fontSize:36,fontWeight:900,letterSpacing:-1,lineHeight:1.1,marginBottom:16,textTransform:"uppercase",color:"#111"}}>A Complete Race-Day System</h1>
+          <p style={{fontSize:15,lineHeight:1.8,color:"#444",marginBottom:8,maxWidth:620,margin:"0 auto 12px"}}>Lightweight tops that reduce friction. Breathable, stretchy shorts that move with you. Running shoes engineered for performance. From short sprints to long distances, Velociti is built head to toe to perform when it counts.</p>
+          <p style={{fontSize:14,fontWeight:600,letterSpacing:.5}}>Race-Day starts here.</p>
+        </div>
 
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>1. Running surface</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>What kind of surface do you plan to run on? There are different sorts of shoes built for different kinds of surfaces. They basically fall into two categories:</p>
-        <h4 style={{fontSize:16,fontWeight:700,marginBottom:6,marginTop:16}}>Road running shoes</h4>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>If you mainly run on smooth but hard surfaces like asphalt or tarmac you'll want footwear that prioritises cushioning in the heel area, and which has a very tough tread to handle the friction from the road surface. These shoes also tend to be the go-to choice for treadmill running. UA Infinite Elite for men and women: Crank it up in shoes that feel responsive from the very first stride — tons of spring, soft UA HOVR+ cushioning to keep your legs feeling fresh so you can go the distance.</p>
-        <h4 style={{fontSize:16,fontWeight:700,marginBottom:6,marginTop:16}}>Trail running shoes</h4>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Run on muddy, stony, uneven surfaces? Then a trail running shoe is ideal. They have chunky lugs on the soles, which give you extra grip. They often have cushioning along the entire sole, since you'll be running on unstable surfaces. UA Bandit Trail 3 for men and women: Specially built for trail running, with crazy cushioning, traction that grips even muddy terrain, and the extra protection trail runners need to keep going.</p>
+        {/* Looks for Race Day */}
+        <div style={{borderTop:"2px solid #111",paddingTop:20,marginBottom:40}}>
+          <h2 style={{fontSize:18,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:20}}>Looks for Race Day</h2>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:16}}>
+            {[0,1,2].map(i=>(
+              <div key={i} style={{background:"#1a1a1a",height:280,overflow:"hidden",borderRadius:2}}>
+                <img src="/images/hero.jpeg" alt="Race day look" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.8}}/>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,fontSize:12,color:"#444"}}>
+            <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Elite Singlet</div><div>Velociti Elite Shorts</div><div style={{fontWeight:600,marginTop:6}}>Velociti Elite 3 Shoes</div></div>
+            <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Short Sleeve</div><div>HeatGear® Mesh Shorts</div><div style={{fontWeight:600,marginTop:6}}>Velociti Distance Shoes</div></div>
+            <div><div style={{fontWeight:600,marginBottom:2}}>Velociti Short Sleeve</div><div>Vanish Elite Shorts</div><div style={{fontWeight:600,marginTop:6}}>Velociti Distance Shoes</div></div>
+          </div>
+        </div>
 
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>2. Your running goals</h3>
-        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
-          <li style={{marginBottom:10}}><strong>Distance:</strong> As a rule of thumb, the longer the distance you cover, the more cushioning you'll want. Someone training for a marathon will need more cushioning than someone doing 3k on a treadmill. UA Infinite Running Shoes: Built insanely light and supportive, paired with soft, springy UA HOVR+ cushioning.</li>
-          <li style={{marginBottom:10}}><strong>Speed:</strong> If smashing a PB is your goal, the best carbon plate running shoes use advanced technology to help propel you forward. UA Flow Velociti: A full-length, carbon fiber plate adds propulsion, while rubberless UA Flow cushioning makes it light and grippy.</li>
-          <li><strong>Competitive vs casual:</strong> The best everyday running shoes are solid all-rounders — perfect for regular, short to mid-distance runs. Competitive running shoes tend to have more specialised features for speed, cushioning or different surfaces.</li>
-        </ul>
+        {/* Built for Speed */}
+        <div style={{borderTop:"2px solid #111",paddingTop:20,marginBottom:40,background:"#f9f9f9",padding:"20px 24px",borderRadius:2}}>
+          <h2 style={{fontSize:18,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:20}}>Built for Speed</h2>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20}}>
+            {[
+              {img:"/images/lokedi.png", tag:"For Race Day",       name:"Velociti Elite 3", desc:"Maximum propulsion and turnover. Pinnacle race day experience."},
+              {img:SHOES.spd.img,        tag:"For Race Day Prep",  name:"Velociti Pro 2",   desc:"Speed, durability, and stability for miles. Training partner to the elite."},
+              {img:SHOES.pace.img,       tag:"For Uninhibited Speed", name:"Velociti SPD",  desc:"Natural, soft underfoot feel."},
+            ].map((s,i)=>(
+              <div key={i} style={{textAlign:"center"}}>
+                <div style={{background:"#fff",borderRadius:4,height:180,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:10,padding:12}}>
+                  <img src={s.img} alt={s.name} style={{maxHeight:160,maxWidth:"100%",objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
+                </div>
+                <div style={{fontSize:10,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:3}}>{s.tag}</div>
+                <div style={{fontSize:15,fontWeight:800,marginBottom:4}}>{s.name}</div>
+                <p style={{fontSize:12,color:"#555",lineHeight:1.6,marginBottom:8}}>{s.desc}</p>
+                <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Now</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>3. Your pronation</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:10}}>Pronation is a technical term that describes the movement of your feet when they strike the ground. There are three kinds of pronation:</p>
-        <ul style={{fontSize:15,lineHeight:1.9,marginBottom:20,paddingLeft:24}}>
-          <li style={{marginBottom:10}}><strong>Neutral:</strong> In neutral pronation, the outside of the heel comes into contact with the ground first, while your toes are still pointing up. The foot then rolls in and most of the side of your foot comes into contact with the ground. You then push off with your front foot — with most of your toes pushing away.</li>
-          <li style={{marginBottom:10}}><strong>Overpronation:</strong> Your foot rolls inward excessively. Most of your weight is on the inside of your foot. People who overpronate often have low arches or flat feet.</li>
-          <li><strong>Underpronation (supination):</strong> Your foot doesn't roll in enough, and most of your weight is carried on the outside. You push off the ground with your smaller toes. People who supinate often have high arches.</li>
-        </ul>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:20}}>The majority of people have a neutral running pattern and will be fine with neutral running shoes. But if you overpronate or underpronate, consider choosing a pair of stability running shoes — they offer extra support and cushioning in the midfoot to help reduce strain.</p>
+        {/* Built for Distance */}
+        <div style={{borderTop:"2px solid #111",paddingTop:20,marginBottom:40}}>
+          <h2 style={{fontSize:18,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginBottom:20}}>Built for Distance</h2>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:24}}>
+            {[
+              {img:SHOES.distance.img, tag:"For Long Runs",       name:"Velociti Distance", desc:"Soft and snappy HOVR+™ superfoam balances responsiveness and stability to make quick work of every mile."},
+              {img:SHOES.pace.img,     tag:"For Everyday Distance", name:"Velociti Pace",   desc:"The ultimate shoe for speeding up your daily miles, with snappy HOVR™ foam for energy return and a light, stable fit."},
+            ].map((s,i)=>(
+              <div key={i}>
+                <div style={{background:"#f5f5f5",borderRadius:4,height:220,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12,padding:16}}>
+                  <img src={s.img} alt={s.name} style={{maxHeight:200,maxWidth:"100%",objectFit:"contain"}} onError={e=>{e.target.style.display="none"}}/>
+                </div>
+                <div style={{fontSize:10,fontWeight:600,letterSpacing:1.5,textTransform:"uppercase",color:"#888",marginBottom:3}}>{s.tag}</div>
+                <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>{s.name}</div>
+                <p style={{fontSize:13,color:"#555",lineHeight:1.7,marginBottom:10}}>{s.desc}</p>
+                <div style={{display:"flex",gap:12}}>
+                  <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Women</span>
+                  <span style={{fontSize:12,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>Shop Men</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>4. The general conditions you run in</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:20}}>Tend to run in hot places? You'll want super breathable shoes. Found the streets of a rainy city? You'll want something that's water resistant. Live in a cool climate? Insulated running shoes are the way to go. Running in areas with low light? Our UA Infinite Pro 2 Running Shoe features 360° reflectivity for added visibility.</p>
+        {/* Find your shoe + FAQs */}
+        <div style={{borderTop:"2px solid #111",paddingTop:32,textAlign:"center"}}>
+          <h2 style={{fontSize:22,fontWeight:800,textTransform:"uppercase",letterSpacing:.5,marginBottom:12}}>Find the Best Running Shoe for You</h2>
+          <button style={{background:UA_BLACK,color:"#fff",border:"none",padding:"12px 32px",fontSize:13,fontWeight:600,borderRadius:2,cursor:"pointer",marginBottom:40,letterSpacing:.5}}>Take the Quiz</button>
+          <div style={{textAlign:"left"}}>
+            {faqs.map((q,i)=>(
+              <div key={i} style={{padding:"14px 0",borderBottom:"1px solid #eee",fontSize:14,color:"#333",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                {q}<span style={{color:"#bbb",fontSize:18}}>›</span>
+              </div>
+            ))}
+            <div style={{textAlign:"center",marginTop:20}}>
+              <span style={{fontSize:13,fontWeight:600,textDecoration:"underline",cursor:"pointer"}}>View All FAQs</span>
+            </div>
+          </div>
+        </div>
 
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>5. Your age</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:32}}>Kids and youth runners have slightly different needs to adult runners. Since they weigh less than adults, youth shoes use lighter materials and don't need to offer the same levels of cushioning.</p>
-
-        <h2 style={{fontSize:28,fontWeight:800,marginBottom:16,marginTop:40,color:"#111"}}>The best running shoes for different needs</h2>
-
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>Best running shoes for beginners</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Just started your running journey? UA Infinite running shoes give you lightweight, flexible and cushioned running gear. The key is the use of our unique HOVR cushioning — it absorbs the impact of every footstrike while generating energy return, helping you spring forward with every step.</p>
-
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best neutral running shoes</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Neutral running shoes give you more cushioning in the rearfoot, and have a flexible mid and front foot so you can flex your feet and push off with maximum ground contact. UA Sonic 7 running shoes for men and women are incredibly light and supportive, featuring our unique HOVR cushioning.</p>
-
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best trail running shoes</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Trail running shoes need to give you tough grip, water resistant uppers, and serious cushioning. UA Bandit Trail 3 running shoes give you everything you need to take on the toughest off-road adventures — massively durable outsoles, a super responsive Charged Cushioning® midsole and a breathable mesh upper.</p>
-
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best running shoes for speed</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Looking to smash your PB? Our best carbon plate running shoes for speed include the New York marathon-winning UA Flow Velociti Elite. A full-length, carbon fiber plate for incredible propulsion, combined with our rubberless UA Flow cushioning and outsole system.</p>
-
-        <h3 style={{fontSize:20,fontWeight:700,marginBottom:8,marginTop:28}}>The best marathon running shoes</h3>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:16}}>Grinding for 26.2 miles is incredibly tough. Men's and women's UA Infinite Elite Marathon Shoes offer incredible, lightweight support mile after mile — ultra springy UA HOVR cushioning, super breathable uppers, and a heel collar for added comfort and lockdown.</p>
-
-        <h2 style={{fontSize:28,fontWeight:800,marginBottom:12,marginTop:40,color:"#111"}}>Under Armour: building some of the world's best running shoes</h2>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:12}}>At Under Armour, we're continually innovating to build the world's best running shoes — from innovative carbon plate technology to UA HOVR™ cushioning that is more durable than traditional foams, everything about our running shoes is made to give you an edge.</p>
-        <p style={{fontSize:15,lineHeight:1.8,marginBottom:0}}>Discover some of the best running shoes for men, women and kids. Or for help narrowing down your search, use our shoe finder tool.</p>
-        <div style={{textAlign:"center",marginTop:40,paddingTop:24,borderTop:"1px solid #eee",fontSize:12,color:"#999"}}>Back to full blog</div>
       </div>
     </div>
   );
