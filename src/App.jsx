@@ -739,16 +739,19 @@ export default function App() {
       {(page==="plp"||page==="comparison") && (
         <div style={{display:"flex",height:"calc(100vh - 113px)"}}>
           {chatOpen && (
-            <ZoeChat
-              messages={messages}
-              onChip={handleChip}
-              onSuggestedQ={handleSuggestedQ}
-              onSuggestedAction={handleSuggestedAction}
-              onFollowUp={handleSuggestedAction}
-              inputVal={chatInput}
-              setInputVal={setChatInput}
-              onSend={handleSend}
-            />
+            <div style={{animation:"slideIn 0.3s ease forwards",overflow:"hidden"}}>
+              <style>{`@keyframes slideIn { from { width:0; opacity:0; } to { width:360px; opacity:1; } }`}</style>
+              <ZoeChat
+                messages={messages}
+                onChip={handleChip}
+                onSuggestedQ={handleSuggestedQ}
+                onSuggestedAction={handleSuggestedAction}
+                onFollowUp={handleSuggestedAction}
+                inputVal={chatInput}
+                setInputVal={setChatInput}
+                onSend={handleSend}
+              />
+            </div>
           )}
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
