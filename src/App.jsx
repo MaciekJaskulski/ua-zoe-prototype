@@ -501,7 +501,7 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
 }
 
 /* ─── PLP HEADER ─────────────────────────────────────────────────────────────── */
-function PLPHeader({ count, filterTags, onRemoveTag }) {
+function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   return (
     <div style={{padding:"20px 24px 0",fontFamily:"Inter,sans-serif"}}>
       <h1 style={{fontSize:22,fontWeight:700,marginBottom:14,color:"#111"}}>Products ({count})</h1>
@@ -512,15 +512,18 @@ function PLPHeader({ count, filterTags, onRemoveTag }) {
           </button>
         ))}
       </div>
-      {filterTags.length>0 && (
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:8,marginBottom:10}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {filterTags.map((tag,i)=>(
             <div key={i} style={{border:"1px solid #ccc",borderRadius:4,padding:"4px 10px",fontSize:12,display:"flex",alignItems:"center",gap:6,color:"#333",background:"#fff"}}>
               {tag}<span onClick={()=>onRemoveTag(tag)} style={{cursor:"pointer",color:"#999",fontWeight:700,fontSize:14,lineHeight:1}}>×</span>
             </div>
           ))}
         </div>
-      )}
+        <button onClick={onOpenChat} style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:999,padding:"10px 20px",fontSize:13,fontWeight:500,cursor:"pointer",display:"flex",alignItems:"center",gap:8,whiteSpace:"nowrap"}}>
+          <span style={{fontSize:14}}>✦</span> Let our AI find the right shoes for you
+        </button>
+      </div>
     </div>
   );
 }
@@ -733,19 +736,21 @@ export default function App() {
 
       {(page==="plp"||page==="comparison") && (
         <div style={{display:"flex",height:"calc(100vh - 113px)"}}>
-          <ZoeChat
-            messages={messages}
-            onChip={handleChip}
-            onSuggestedQ={handleSuggestedQ}
-            onSuggestedAction={handleSuggestedAction}
-            onFollowUp={handleSuggestedAction}
-            inputVal={chatInput}
-            setInputVal={setChatInput}
-            onSend={handleSend}
-          />
+          {chatOpen && (
+            <ZoeChat
+              messages={messages}
+              onChip={handleChip}
+              onSuggestedQ={handleSuggestedQ}
+              onSuggestedAction={handleSuggestedAction}
+              onFollowUp={handleSuggestedAction}
+              inputVal={chatInput}
+              setInputVal={setChatInput}
+              onSend={handleSend}
+            />
+          )}
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
-              <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))}/>
+              <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
               <div key={gridKey} style={{padding:"12px 24px 40px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
