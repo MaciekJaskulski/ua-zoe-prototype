@@ -648,7 +648,7 @@ export default function App() {
   const [page, setPage]                   = useState("clp");
   const [searchActive, setSearchActive]   = useState(false);
   const [searchQuery, setSearchQuery]     = useState("");
-  const [messages, setMessages]           = useState([{ from:"zoe", text:STEPS[0].text, chips:STEPS[0].chips }]);
+  const [messages, setMessages]           = useState([]);
   const [scriptStep, setScriptStep]       = useState(0);
   const [filterTags, setFilterTags]       = useState([]);
   const [productCount, setProductCount]   = useState(64);
@@ -662,12 +662,40 @@ export default function App() {
 
   const pushUser = (text) => setMessages(p=>[...p,{from:"user",text}]);
 
+  // Stream initial message on mount and whenever page resets to clp->plp
+  const streamInitial = (obj) => {
+    const fullText = obj.text || "";
+    setMessages([{from:"zoe", ...obj, text:"", streaming:true}]);
+    let i = 0;
+    const interval = setInterval(() => {
+      i += 2;
+      setMessages(p => {
+        const msgs = [...p];
+        const last = msgs[msgs.length - 1];
+        if (!last || last.from !== "zoe") { clearInterval(interval); return msgs; }
+        const done = i >= fullText.length;
+        msgs[msgs.length - 1] = {
+          ...last,
+          text: fullText.slice(0, i),
+          streaming: !done,
+          chips: done ? obj.chips : undefined,
+        };
+        if (done) clearInterval(interval);
+        return msgs;
+      });
+    }, 30);
+  };
+
+  useEffect(() => {
+    streamInitial({ text: STEPS[0].text, chips: STEPS[0].chips });
+  }, []);
+
   const pushZoe = (obj) => {
     const fullText = obj.text || "";
     // Add message with empty text first, then stream chars in
     setMessages(p => [...p, {from:"zoe", ...obj, text:"", streaming:true}]);
     let i = 0;
-    const chunkSize = 3; // chars per tick
+    const chunkSize = 2; // chars per tick
     const interval = setInterval(() => {
       i += chunkSize;
       setMessages(p => {
@@ -689,7 +717,7 @@ export default function App() {
         if (done) clearInterval(interval);
         return msgs;
       });
-    }, 18);
+    }, 30);
   };
 
   /* apply grid state from a script step */
@@ -833,7 +861,7 @@ export default function App() {
           onConfirm={()=>{
             setShowModal(false);
             setPage("comparison");
-            setMessages([{ from:"zoe", text:"Here's the full comparison between UA Velociti Elite 3 'Sharon Lokedi' PE and UA Velociti Distance! Feel free to ask me anything — price, carbon plate, heel offset, or which one suits you best." }]);
+            streamInitial({ text:"Here's the full comparison between UA Velociti Elite 3 'Sharon Lokedi' PE and UA Velociti Distance! Feel free to ask me anything — price, carbon plate, heel offset, or which one suits you best." });
           }}
           onClose={()=>setShowModal(false)}
         />
