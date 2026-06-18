@@ -687,8 +687,10 @@ export default function App() {
   };
 
   useEffect(() => {
-    streamInitial({ text: STEPS[0].text, chips: STEPS[0].chips });
-  }, []);
+    if (chatOpen && page === "plp") {
+      streamInitial({ text: STEPS[0].text, chips: STEPS[0].chips });
+    }
+  }, [chatOpen]);
 
   const pushZoe = (obj) => {
     const fullText = obj.text || "";
