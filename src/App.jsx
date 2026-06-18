@@ -44,11 +44,29 @@ const GRID_FINAL = [
   SHOES.charged, SHOES.haloRacer,
 ];
 
+/* ─── QUESTION DETECTION ────────────────────────────────────────────────────── */
+function isHeelOffsetQ(t){
+  const s=t.toLowerCase();
+  return s.includes("heel offset")||s.includes("heel drop")||s.includes("drop")||s.includes("offset")||s.includes("heel height");
+}
+function isPriceKeywordQ(t){
+  const s=t.toLowerCase();
+  return s.includes("price")||s.includes("expensive")||s.includes("cost")||s.includes("worth")||s.includes("cheaper")||s.includes("pay")||s.includes("pricey")||s.includes("difference")&&(s.includes("£")||s.includes("money"));
+}
+
 /* ─── RAIN DETECTION ────────────────────────────────────────────────────────── */
 function isRainQ(t){
   const s=t.toLowerCase();
   return s.includes("rain")||s.includes("wet")||s.includes("water")||s.includes("damp")||s.includes("weather")||s.includes("drizzle")||s.includes("downpour")||s.includes("rainy")||s.includes("moisture");
 }
+const HEEL_OFFSET_ANSWER = `Heel offset (or heel drop) is the height difference between your heel and forefoot in the shoe.
+
+The Lokedi PE has a 2mm drop — almost flat. This encourages a midfoot or forefoot strike, which transfers energy more directly into the carbon plate for maximum propulsion. It also means less cushioning under the heel, so it rewards efficient running form.
+
+The Distance has a 6mm drop — moderate and more forgiving. It works well for heel strikers and runners who haven't adapted to low-drop shoes. The extra heel height also helps protect your achilles and calves over high mileage.
+
+If you're used to standard trainers (8–12mm drop), jumping straight into the Lokedi PE's 2mm could strain your achilles. Easing in gradually — or using the Distance for training — is the smarter approach.`;
+
 const RAIN_ANSWER=`Neither shoe is built exclusively for wet weather, but they handle it differently.
 
 UA Velociti Distance: The breathable mesh upper absorbs water in heavy rain, adding a little weight mid-run. The rubber outsole provides solid grip on wet tarmac for training runs — most road runners find it perfectly usable in light to moderate rain.
@@ -63,6 +81,8 @@ function isPriceQ(t){
   return (s.includes("expensive")||s.includes("price")||s.includes("cost")||s.includes("worth")||s.includes("cheap")||s.includes("why")&&s.includes("more")||s.includes("difference")&&(s.includes("price")||s.includes("cost")||s.includes("£"))||s.includes("justify")||s.includes("pay")||s.includes("pricey"))
     && (s.includes("lokedi")||s.includes("elite")||s.includes("sharon")||s.includes("expensive")||s.includes("more")||s.includes("225")||s.includes("cost"));
 }
+const PRICE_ANSWER_SHORT = `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. It's the same technology that helped Sharon Lokedi win Boston 2025. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost. Put simply: the Lokedi PE is a race-day weapon, the Distance is your training workhorse.`;
+
 const PRICE_CITATIONS = [
   { abbr:"UA", label:"Under Armour — Velociti Elite 3 Story", url:"https://about.underarmour.com/en/stories/2025/10/under-armour-s-next-generation-of-velociti-is-engineered-for-spe.html", color:"#c8102e" },
   { abbr:"VE", label:"UA Velociti Elite 3 Product Page", url:"https://www.underarmour.co.uk/en-gb/p/ua-velociti-elite-3-sharon-lokedi-pe-unisex-running-shoes/6005377.html", color:"#1a1a1a" },
@@ -567,15 +587,16 @@ function CompareTable() {
         <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{padding:"0 20px 20px",display:"flex",gap:14,alignItems:"flex-start"}}>
-              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{cursor:s.id==="lokedi"?"pointer":"default",flexShrink:0}}>
-                <ShoeImage shoe={s} height={100} imgHeight={90}/>
+            <div key={s.id} style={{padding:"0 12px 16px"}}>
+              <div
+                onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}
+                style={{cursor:s.id==="lokedi"?"pointer":"default",background:"#f7f7f7",borderRadius:4,height:210,display:"flex",alignItems:"center",justifyContent:"center",padding:16,marginBottom:12}}
+              >
+                <ShoeImage shoe={s} height={210} imgHeight={190}/>
               </div>
-              <div>
-                <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:700,fontSize:14,marginBottom:3,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
-                <div style={{fontSize:12,color:"#777",marginBottom:6}}>{s.sub}</div>
-                <div style={{fontWeight:700,fontSize:15,color:"#111"}}>{s.price}</div>
-              </div>
+              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:700,fontSize:14,marginBottom:3,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
+              <div style={{fontSize:12,color:"#777",marginBottom:4}}>{s.sub}</div>
+              <div style={{fontWeight:700,fontSize:15,color:"#111"}}>{s.price}</div>
             </div>
           ))}
         </div>
@@ -698,8 +719,13 @@ export default function App() {
   const handleSend = () => {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
-    if(isRainQ(txt))   { setTimeout(()=>pushZoe({text:RAIN_ANSWER}),500); return; }
-    if(isPriceQ(txt))  { setTimeout(()=>pushZoe({text:PRICE_ANSWER, citations:PRICE_CITATIONS}),500); return; }
+    if(isHeelOffsetQ(txt))  { setTimeout(()=>pushZoe({text:HEEL_OFFSET_ANSWER}),500); return; }
+    if(isRainQ(txt))        { setTimeout(()=>pushZoe({text:RAIN_ANSWER}),500); return; }
+    if(isPriceKeywordQ(txt)||isPriceQ(txt)) {
+      const ans = page==="comparison" ? PRICE_ANSWER_SHORT : PRICE_ANSWER;
+      const cit = page==="comparison" ? PRICE_CITATIONS : PRICE_CITATIONS;
+      setTimeout(()=>pushZoe({text:ans, citations:cit}),500); return;
+    }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
   };
 
@@ -770,7 +796,11 @@ export default function App() {
 
       {showModal && (
         <CompareModal
-          onConfirm={()=>{ setShowModal(false); setPage("comparison"); }}
+          onConfirm={()=>{
+            setShowModal(false);
+            setPage("comparison");
+            setMessages([{ from:"zoe", text:"Here's the full comparison between UA Velociti Elite 3 'Sharon Lokedi' PE and UA Velociti Distance! Feel free to ask me anything — price, carbon plate, heel offset, or which one suits you best." }]);
+          }}
           onClose={()=>setShowModal(false)}
         />
       )}
