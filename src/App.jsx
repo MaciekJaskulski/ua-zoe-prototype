@@ -365,11 +365,11 @@ function ShoeImage({ shoe, height=210, imgHeight=190 }) {
     );
   }
   return (
-    <div style={{background:"#f7f7f7",height,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+    <div style={{background:"#f7f7f7",height,display:"flex",alignItems:"center",justifyContent:"center",padding:0,overflow:"hidden"}}>
       <img
         src={urlIdx < urls.length ? urls[urlIdx] : urls[0]}
         alt={shoe.name}
-        style={{maxHeight:imgHeight,maxWidth:"100%",objectFit:"contain"}}
+        style={{width:"100%",height:"100%",objectFit:"contain"}}
         onError={()=>{ if(urlIdx < urls.length-1) setUrlIdx(i=>i+1); else setFailed(true); }}
       />
     </div>
@@ -381,7 +381,7 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
   return (
     <div style={{background:"#fff",border:"1px solid #eee",borderRadius:2,overflow:"hidden",position:"relative",transition:"box-shadow .2s"}}>
       <div style={{position:"absolute",top:10,right:10,zIndex:1,cursor:"pointer",fontSize:18,color:"#bbb"}}>♡</div>
-      <ShoeImage shoe={shoe} height={210} imgHeight={190}/>
+      <ShoeImage shoe={shoe} height={260} imgHeight={260}/>
       <div style={{padding:"8px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <button onClick={()=>onCompareToggle(shoe)} style={{background:compareSelected?"#333":UA_BLACK,color:"#fff",border:"none",borderRadius:20,padding:"6px 16px",fontSize:12,fontWeight:500,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
           {compareSelected?"✓ Compare":"Compare"}
