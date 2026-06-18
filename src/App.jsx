@@ -463,7 +463,12 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
           <div key={i}>
             {msg.from==="zoe"
               ? <div>
-                  <div style={{background:"#f2f2f2",color:"#111",borderRadius:"6px 18px 18px 6px",padding:"10px 14px",fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"95%"}}>{msg.text}</div>
+                  <div style={{background:"#f2f2f2",color:"#111",borderRadius:"6px 18px 18px 6px",padding:"10px 14px",fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",maxWidth:"95%"}}>
+                    {msg.text}
+                    {msg.streaming && <span style={{display:"inline-block",width:2,height:"1em",background:"#555",marginLeft:2,verticalAlign:"text-bottom",animation:"blink 0.7s step-end infinite"}}>
+                      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+                    </span>}
+                  </div>
                   {msg.citations && <CitationBar sources={msg.citations}/>}
                 </div>
               : <div style={{display:"flex",justifyContent:"flex-end"}}>
@@ -655,8 +660,37 @@ export default function App() {
   const [chatInput, setChatInput]         = useState("");
   const [chatOpen, setChatOpen]           = useState(false);
 
-  const pushZoe = (obj) => setMessages(p=>[...p,{from:"zoe",...obj}]);
   const pushUser = (text) => setMessages(p=>[...p,{from:"user",text}]);
+
+  const pushZoe = (obj) => {
+    const fullText = obj.text || "";
+    // Add message with empty text first, then stream chars in
+    setMessages(p => [...p, {from:"zoe", ...obj, text:"", streaming:true}]);
+    let i = 0;
+    const chunkSize = 3; // chars per tick
+    const interval = setInterval(() => {
+      i += chunkSize;
+      setMessages(p => {
+        const msgs = [...p];
+        const last = msgs[msgs.length - 1];
+        if (!last || last.from !== "zoe") { clearInterval(interval); return msgs; }
+        const done = i >= fullText.length;
+        msgs[msgs.length - 1] = {
+          ...last,
+          text: fullText.slice(0, i),
+          streaming: !done,
+          // only show chips/suggestedQs/etc once streaming is done
+          chips: done ? obj.chips : undefined,
+          suggestedQs: done ? obj.suggestedQs : undefined,
+          followUp: done ? obj.followUp : undefined,
+          suggestedAction: done ? obj.suggestedAction : undefined,
+          citations: done ? obj.citations : undefined,
+        };
+        if (done) clearInterval(interval);
+        return msgs;
+      });
+    }, 18);
+  };
 
   /* apply grid state from a script step */
   const applyGridState = (step) => {
