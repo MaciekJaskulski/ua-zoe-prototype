@@ -716,7 +716,8 @@ export default function App() {
   /* search submit */
   const handleSearchSubmit = () => {
     if(searchQuery.toLowerCase().includes("running")||searchQuery.trim().length>0) {
-      setSearchActive(false); setPage("plp");
+      setSearchActive(false);
+      setChatOpen(false); setPage("plp");
     }
   };
 
