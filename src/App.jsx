@@ -632,6 +632,7 @@ export default function App() {
   const [gridVisible, setGridVisible]     = useState(true);
   const [showModal, setShowModal]         = useState(false);
   const [chatInput, setChatInput]         = useState("");
+  const [chatOpen, setChatOpen]           = useState(false);
 
   const pushZoe = (obj) => setMessages(p=>[...p,{from:"zoe",...obj}]);
   const pushUser = (text) => setMessages(p=>[...p,{from:"user",text}]);
