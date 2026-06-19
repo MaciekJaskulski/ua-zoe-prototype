@@ -790,7 +790,7 @@ It works in two stages: on landing, the foam compresses under your bodyweight, a
 
 HOVR+ is the upgraded version used in both shoes here. It's lighter and softer than standard HOVR, engineered specifically for distance running where your legs need to feel fresh at kilometre 35, not just kilometre 5.
 
-In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe to maximise cushioning across long training miles. In the Lokedi PE, HOVR+ works in combination with the carbon fibre plate — the foam handles impact absorption while the plate provides the propulsive snap that pure foam alone can't deliver.`, suggestedQs:["How does HOVR+ differ from standard HOVR?","Which shoe has more HOVR+ foam?","Does cushioning affect speed?"]}),450);
+In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe to maximise cushioning across long training miles. In the Lokedi PE, HOVR+ works in combination with the carbon fibre plate — the foam handles impact absorption while the plate provides the propulsive snap that pure foam alone can't deliver.`, citations:PRICE_CITATIONS, suggestedQs:["How does HOVR+ differ from standard HOVR?","Which shoe has more HOVR+ foam?","Does cushioning affect speed?"]}),450);
     } else if(q==="What is UA HOVR?") {
       setTimeout(()=>{ const s=STEPS[10]; pushZoe({text:s.text,followUp:s.followUp}); setScriptStep(10); },450);
     } else if(isPriceQ(q)) {
