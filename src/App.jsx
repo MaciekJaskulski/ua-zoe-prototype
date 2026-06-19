@@ -783,7 +783,15 @@ export default function App() {
   /* suggested Q tap */
   const handleSuggestedQ = (q) => {
     pushUser(q);
-    if(q==="What is UA HOVR?") {
+    if(q==="What is UA HOVR?" && page==="comparison") {
+      setTimeout(()=>pushZoe({text:`HOVR is UA's signature cushioning technology — the foundation of their entire performance footwear range.
+
+It works in two stages: on landing, the foam compresses under your bodyweight, absorbing the impact force through your heel and midfoot. Rather than simply deadening that energy, HOVR then springs back, returning it as forward momentum at push-off. Runners consistently describe it as feeling "springy but controlled" — it absorbs the hard stuff and gives back the good stuff.
+
+HOVR+ is the upgraded version used in both shoes here. It's lighter and softer than standard HOVR, engineered specifically for distance running where your legs need to feel fresh at kilometre 35, not just kilometre 5.
+
+In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe to maximise cushioning across long training miles. In the Lokedi PE, HOVR+ works in combination with the carbon fibre plate — the foam handles impact absorption while the plate provides the propulsive snap that pure foam alone can't deliver.`, suggestedQs:["How does HOVR+ differ from standard HOVR?","Which shoe has more HOVR+ foam?","Does cushioning affect speed?"]}),450);
+    } else if(q==="What is UA HOVR?") {
       setTimeout(()=>{ const s=STEPS[10]; pushZoe({text:s.text,followUp:s.followUp}); setScriptStep(10); },450);
     } else if(isPriceQ(q)) {
       setTimeout(()=>pushZoe({text:PRICE_ANSWER, citations:PRICE_CITATIONS}),450);
