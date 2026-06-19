@@ -81,17 +81,17 @@ function isPriceQ(t){
   return (s.includes("expensive")||s.includes("price")||s.includes("cost")||s.includes("worth")||s.includes("cheap")||s.includes("why")&&s.includes("more")||s.includes("difference")&&(s.includes("price")||s.includes("cost")||s.includes("£"))||s.includes("justify")||s.includes("pay")||s.includes("pricey"))
     && (s.includes("lokedi")||s.includes("elite")||s.includes("sharon")||s.includes("expensive")||s.includes("more")||s.includes("225")||s.includes("cost"));
 }
-const LOKEDI_PRICE_ANSWER = `The UA Velociti Elite 3 'Sharon Lokedi' PE is priced at £225 because it's built around a full-length carbon fibre plate — the same technology used by elite marathon runners to break world records.
+const LOKEDI_PRICE_ANSWER = `The Velociti Elite 3 'Sharon Lokedi' PE is a full race-day system built around a full-length carbon fibre plate — the same technology that powers world-record marathon performances.
 
-Here's what that plate does: it acts like a spring embedded in the midsole. On each landing, it stores energy; at toe-off, it releases it explosively, propelling you forward with less muscular effort. Studies show carbon plate shoes improve running economy by 4–8% per stride — across a full marathon, that compounds into a significant reduction in fatigue and a faster finish time.
+The carbon plate acts as a spring in the midsole. On landing it stores energy, and at toe-off it releases it explosively, propelling you forward with significantly less muscular effort. Research shows this improves running economy by 4–8% per stride — over 42km, that's the difference between fading at mile 20 and finishing strong.
 
-Everything else in the shoe is engineered around that plate:
-• HOVR+ superfoam — lighter and more responsive than standard HOVR, tuned to work in sync with the plate
-• Leno weave upper — a specialist material that provides race-day lockdown at near-weightless construction
-• 221g total weight — UA's lightest road running shoe
-• 2mm heel drop — designed to channel your stride directly into the plate's flex point
+Everything in the shoe is engineered to work with that plate:
+• HOVR+ superfoam — UA's lightest, most responsive cushioning, tuned to complement the plate's snap
+• Leno weave upper — specialist construction that locks your foot in place at race pace while weighing almost nothing
+• 221g — among the lightest marathon shoes on the market
+• 2mm heel drop — positions your foot to transfer energy directly into the plate's flex point
 
-This is the shoe Sharon Lokedi wore to win the Boston Marathon 2025. It's not a training shoe — it's a race-day weapon, priced accordingly.`;
+It was co-developed with Sharon Lokedi, who wore it to win the Boston Marathon 2025 and set a course record. It's a precision race instrument — every gram and every layer of it is there for a reason.`
 
 const PRICE_ANSWER_SHORT = `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. It's the same technology that helped Sharon Lokedi win Boston 2025. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost. Put simply: the Lokedi PE is a race-day weapon, the Distance is your training workhorse.`;
 
@@ -131,7 +131,7 @@ const STEPS = [
   { id:7,  from:"user", text:"No specific needs", gridState:"final" },
   { id:8,  from:"zoe",  text:"I found 5 shoes best matching your needs", suggestedQs:["What is UA HOVR?","How does the sizing run?","Will it hold up for a full marathon?"] },
   { id:9,  from:"user", text:"What is UA HOVR?" },
-  { id:10, from:"zoe",  text:"HOVR is UA's signature cushioning technology and it's the main reason their long-distance shoes feel different from the competition.\n\nUA HOVR — how it works:\nAbsorbs impact on landing — the foam compresses under your bodyweight, cushioning your heel and midfoot on every stride. Over 30–42km, this dramatically reduces accumulated stress on your joints.\n\nReturns energy on push-off — rather than deadening the impact, HOVR snaps back and propels you forward. Runners consistently describe it as \"springy but controlled.\"", followUp:"Are there any alternatives?", suggestedQs:["Why are the Lokedi shoes so much more expensive?"] },
+  { id:10, from:"zoe",  text:"HOVR is UA's signature cushioning technology and it's the main reason their long-distance shoes feel different from the competition.\n\nUA HOVR — how it works:\nAbsorbs impact on landing — the foam compresses under your bodyweight, cushioning your heel and midfoot on every stride. Over 30–42km, this dramatically reduces accumulated stress on your joints.\n\nReturns energy on push-off — rather than deadening the impact, HOVR snaps back and propels you forward. Runners consistently describe it as \"springy but controlled.\"", followUp:"Are there any alternatives?" },
   { id:11, from:"user", text:"Are there any alternatives?" },
   { id:12, from:"zoe",  text:"Here are two others worth knowing about — both from the Velociti collection, both with HOVR, but built for different moments in your training:\n\n• UA Velociti Elite 3 'Sharon Lokedi' PE — £225. Race-day shoe. Carbon fibre plate + HOVR+ foam. Built for race day speed.\n\n• UA Velociti Pace — £100. Daily trainer. HOVR cushioning for everyday miles.", suggestedAction:"Can you compare all of them?" },
   { id:13, from:"user", text:"Can you compare all of them?" },
@@ -815,9 +815,12 @@ export default function App() {
     if(isHeelOffsetQ(txt))  { setTimeout(()=>pushZoe({text:HEEL_OFFSET_ANSWER, suggestedQs:["How long does it take to adapt to a lower drop?","I'm a heel striker — which shoe suits me?","Can a low drop shoe cause injury?"]}),500); return; }
     if(isRainQ(txt))        { setTimeout(()=>pushZoe({text:RAIN_ANSWER, suggestedQs:["Does the Lokedi PE have any water-resistant coating?","Will wet conditions affect the carbon plate?","Which shoe dries faster after a wet run?"]}),500); return; }
     if(isPriceKeywordQ(txt)||isPriceQ(txt)) {
-      const ans = page==="comparison" ? PRICE_ANSWER_SHORT : PRICE_ANSWER;
-      const qs = ["Is the carbon plate worth it for a first marathon?","Can I use the Lokedi PE for training runs too?","Which one offers better value for money?"];
-      setTimeout(()=>pushZoe({text:ans, citations:PRICE_CITATIONS, suggestedQs:qs}),500); return;
+      if(page==="comparison") {
+        setTimeout(()=>pushZoe({text:PRICE_ANSWER_SHORT, citations:PRICE_CITATIONS, suggestedQs:["Is the carbon plate worth it for a first marathon?","Can I use the Lokedi PE for training runs too?","Which one offers better value for money?"]}),500);
+      } else {
+        setTimeout(()=>pushZoe({text:LOKEDI_PRICE_ANSWER, citations:PRICE_CITATIONS, suggestedQs:["What makes HOVR+ different from standard HOVR?","Is the carbon plate legal in all races?","How many km will the Lokedi PE last?"]}),500);
+      }
+      return;
     }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
   };
