@@ -584,7 +584,16 @@ function CompareModal({ onConfirm, onClose }) {
 }
 
 /* ─── COMPARISON TABLE ───────────────────────────────────────────────────────── */
-function CompareTable() {
+function CompareTable({ onRowClick }) {
+  const ROW_RESPONSES = {
+    "Price": `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost.`,
+    "Best for": `The Lokedi PE is engineered exclusively for race day — its carbon plate and low 2mm drop are optimised for speed at peak effort, not daily mileage. The Distance is your training workhorse, built to absorb the cumulative load of 3–5 sessions a week across a full marathon prep block.`,
+    "Cushioning": `Both use HOVR+ foam, but differently. In the Distance, full-length HOVR+ prioritises comfort and protection over long miles — it's softer and more forgiving. In the Lokedi PE, the HOVR+ works in combination with the carbon fibre plate: the foam absorbs impact while the plate stores and releases energy, creating a propulsive snap that pure foam can't replicate.`,
+    "Weight": `The 77g difference matters more than it sounds. Over a marathon, that's roughly 3,200 extra grams lifted per foot with every stride. The Lokedi PE's Leno weave upper and minimal construction keep it race-light. The Distance carries more foam and a heavier mesh upper — worth it for training comfort, but not what you want on race day.`,
+    "Heel offset": `Heel offset is the height difference between your heel and forefoot. The Lokedi PE's 2mm drop encourages a midfoot strike that transfers energy directly into the carbon plate. The Distance's 6mm drop is more forgiving for heel strikers and protects your achilles over high mileage. If you're used to standard trainers (8–12mm), the Lokedi PE's 2mm requires gradual adaptation.`,
+    "Weekly use": `The carbon plate in the Lokedi PE isn't designed for repeated daily loading — using it for every run would wear it out faster and offer no training benefit over the Distance. Most elite runners keep their race shoe for race day and key workouts only. The Distance handles 3–5 sessions a week comfortably across a full training block.`,
+    "Sizing": `The Lokedi PE runs small due to its snug Leno weave upper and race-fit construction — go half a size up. The Distance runs true to size, though if you're between sizes and doing long runs, a half size up gives your toes room when feet swell after 25km.`,
+  };
   const rows=[["Price","£225","£145"],["Best for","Race day only","Long training runs"],["Cushioning","HOVR+ carbon plate","HOVR+ full-length"],["Weight","221g","298g"],["Heel offset","2mm","6mm"],["Weekly use","Race days only","3–5/week"],["Sizing","Half size up","True to size"]];
   return (
     <div style={{flex:1,overflowY:"auto",fontFamily:"Inter,sans-serif"}}>
@@ -607,7 +616,15 @@ function CompareTable() {
         </div>
         {rows.map(([lbl,a,b],i)=>(
           <div key={i} style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr",borderTop:"1px solid #eee"}}>
-            <div style={{padding:"13px 0",fontWeight:600,fontSize:13,color:"#333"}}>{lbl}</div>
+            <div
+              onClick={()=>onRowClick && onRowClick(ROW_RESPONSES[lbl])}
+              style={{padding:"13px 0",fontWeight:600,fontSize:13,color:"#333",cursor:"pointer",display:"flex",alignItems:"center",gap:6,userSelect:"none"}}
+              onMouseEnter={e=>e.currentTarget.style.color=UA_RED}
+              onMouseLeave={e=>e.currentTarget.style.color="#333"}
+            >
+              {lbl}
+              <span style={{fontSize:10,color:"#bbb"}}>›</span>
+            </div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{a}</div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{b}</div>
           </div>
@@ -854,7 +871,7 @@ export default function App() {
               <Footer/>
             </div>
           )}
-          {page==="comparison" && <CompareTable/>}
+          {page==="comparison" && <CompareTable onRowClick={(response)=>{ if(response) pushZoe({text:response}); }}/>}
         </div>
       )}
 
