@@ -396,64 +396,46 @@ function ShoeImage({ shoe, height, imgHeight }) {
 /* ─── PRODUCT CARD (grid) ───────────────────────────────────────────────────── */
 function ProductCard({ shoe, compareSelected, onCompareToggle }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <div
       onMouseEnter={()=>setHovered(true)}
       onMouseLeave={()=>setHovered(false)}
-      style={{background:"#fff",position:"relative",cursor:"pointer",transition:"box-shadow .2s",boxShadow:hovered?"0 4px 24px rgba(0,0,0,0.10)":"none"}}
+      style={{background:"#fff",position:"relative",cursor:"pointer"}}
     >
       {/* Wishlist */}
-      <div style={{position:"absolute",top:14,right:14,zIndex:2,cursor:"pointer",color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
+      <div style={{position:"absolute",top:12,right:12,zIndex:2,color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
 
-      {/* Image area — tall, clean, no padding */}
-      <div style={{background:"#fff",position:"relative",overflow:"hidden",height:280,borderBottom:"1px solid #f0f0f0"}}>
-        <ShoeImage shoe={shoe} height={280}/>
-
-        {/* Bag icon bottom right — only on hover */}
+      {/* Image — no background box, shoe on white, large */}
+      <div style={{position:"relative",width:"100%",paddingBottom:"100%",background:"#f5f5f5",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <ShoeImage shoe={shoe}/>
+        </div>
+        {/* Bag icon bottom right on hover */}
         {hovered && (
-          <div style={{position:"absolute",bottom:14,right:14,background:UA_BLACK,borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:"#fff",fontSize:16,boxShadow:"0 2px 8px rgba(0,0,0,0.2)"}}>
+          <div style={{position:"absolute",bottom:12,right:12,background:"#111",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:15}}>
             🛍
           </div>
         )}
       </div>
 
       {/* Color swatches */}
-      <div style={{padding:"10px 14px 0",display:"flex",gap:5,flexWrap:"wrap"}}>
+      <div style={{padding:"10px 0 6px",display:"flex",gap:5}}>
         {shoe.colors.map((c,i)=>(
-          <div key={i} style={{width:14,height:14,borderRadius:"50%",background:c,border:"1.5px solid #e0e0e0",cursor:"pointer"}}/>
+          <div key={i} style={{width:14,height:14,borderRadius:"50%",background:c,border:"1px solid #ddd"}}/>
         ))}
       </div>
 
       {/* Info */}
-      <div style={{padding:"8px 14px 14px"}}>
+      <div style={{paddingBottom:14}}>
         <div style={{fontSize:14,fontWeight:600,color:"#111",marginBottom:2,lineHeight:1.3}}>{shoe.name}</div>
-        <div style={{fontSize:12,color:"#777",marginBottom:10,lineHeight:1.4}}>{shoe.sub}</div>
-        <div style={{fontSize:15,fontWeight:700,color:"#111",marginBottom:10}}>{shoe.price}</div>
-
-        {/* Compare button — stays as required */}
+        <div style={{fontSize:12,color:"#777",marginBottom:8}}>{shoe.sub}</div>
+        <div style={{fontSize:14,fontWeight:700,color:"#111",marginBottom:10}}>{shoe.price}</div>
         <button
           onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
-          style={{
-            background:UA_BLACK,
-            color:"#fff",
-            border:"none",
-            borderRadius:100,
-            padding:"8px 20px",
-            fontSize:12,
-            fontWeight:600,
-            cursor:"pointer",
-            letterSpacing:.3,
-            display:"flex",
-            alignItems:"center",
-            gap:6,
-            opacity:compareSelected?1:0.85,
-          }}
+          style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:100,padding:"8px 20px",fontSize:12,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:6,opacity:compareSelected?1:0.75}}
         >
-          {compareSelected && <span style={{fontSize:11}}>✓</span>}
-          Compare
+          {compareSelected && <span>✓</span>}Compare
         </button>
-
         <div style={{fontSize:11,color:"#2e7d32",fontWeight:500,marginTop:8}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
       </div>
     </div>
@@ -571,7 +553,7 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
 /* ─── PLP HEADER ─────────────────────────────────────────────────────────────── */
 function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   return (
-    <div style={{padding:"20px 60px 0",fontFamily:"Inter,sans-serif"}}>
+    <div style={{padding:"20px 24px 0",fontFamily:"Inter,sans-serif"}}>
       <div style={{fontSize:12,color:"#777",marginBottom:8}}>Sports / Running</div>
       <h1 style={{fontSize:28,fontWeight:800,marginBottom:14,color:"#111",letterSpacing:-.5}}>Running Shoes</h1>
       <div style={{fontSize:13,color:"#777",marginBottom:14}}>{count} Items</div>
@@ -929,7 +911,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             {page==="plp" && (
               <>
                 <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                   {currentGrid.map(shoe=>(
                     <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                   ))}
