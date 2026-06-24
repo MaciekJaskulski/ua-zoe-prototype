@@ -435,19 +435,19 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
         <button
           onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
           style={{
-            background:compareSelected ? UA_BLACK : "transparent",
-            color:compareSelected ? "#fff" : "#111",
-            border:"1.5px solid #111",
-            borderRadius:2,
-            padding:"7px 16px",
+            background:UA_BLACK,
+            color:"#fff",
+            border:"none",
+            borderRadius:100,
+            padding:"8px 20px",
             fontSize:12,
             fontWeight:600,
             cursor:"pointer",
             letterSpacing:.3,
-            transition:"background .15s, color .15s",
             display:"flex",
             alignItems:"center",
             gap:6,
+            opacity:compareSelected?1:0.85,
           }}
         >
           {compareSelected && <span style={{fontSize:11}}>✓</span>}
