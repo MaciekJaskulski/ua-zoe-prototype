@@ -889,12 +889,9 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
       {page==="clp" && <CLPPage/>}
 
             {(page==="plp"||page==="comparison") && (
-        <div style={{display:"grid",gridTemplateColumns:"56px 360px 1fr 56px",height:"calc(100vh - 113px)",overflow:"hidden"}}>
+        <div style={{display:"grid",gridTemplateColumns:"360px 1fr",height:"calc(100vh - 113px)",overflow:"hidden"}}>
 
-          {/* col 1 — left margin */}
-          <div/>
-
-          {/* col 2 — chat */}
+          {/* chat */
           <div style={{borderRight:"1px solid #e8e8e8",overflow:"hidden",background:"#fff"}}>
             {chatOpen && (
               <div style={{animation:"slideIn 0.3s ease forwards",height:"100%"}}>
@@ -913,7 +910,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             )}
           </div>
 
-          {/* col 3 — content */}
+          {/* content */}
           <div style={{overflowY:"auto",height:"100%"}}>
             {page==="plp" && (
               <>
@@ -929,8 +926,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             {page==="comparison" && <CompareTable onRowClick={(obj)=>{ if(obj){ pushUser(obj.userQ); setTimeout(()=>pushZoe({text:obj.text, suggestedQs:obj.qs}),400); } }}/>}
           </div>
 
-          {/* col 4 — right margin */}
-          <div/>
+
         </div>
       )}
 
