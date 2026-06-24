@@ -831,7 +831,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
       if(page==="comparison") {
         setTimeout(()=>pushZoe({text:PRICE_ANSWER_SHORT, citations:PRICE_CITATIONS, suggestedQs:["Is the carbon plate worth it for a first marathon?","Can I use the Lokedi PE for training runs too?","Which one offers better value for money?"]}),500);
       } else {
-        setTimeout(()=>pushZoe({text:LOKEDI_PRICE_ANSWER, citations:PRICE_CITATIONS, followUp:"Are there any alternatives?", suggestedQs:["What makes HOVR+ different from standard HOVR?","Is the carbon plate legal in all races?","How many km will the Lokedi PE last?"]}),500);
+        setTimeout(()=>pushZoe({text:LOKEDI_PRICE_ANSWER, citations:PRICE_CITATIONS, suggestedQs:["What makes HOVR+ different from standard HOVR?","Is the carbon plate legal in all races?","How many km will the Lokedi PE last?"]}),500);
       }
       return;
     }
