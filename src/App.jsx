@@ -406,7 +406,7 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
       <div style={{position:"absolute",top:12,right:12,zIndex:2,color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
 
       {/* Image — no background box, shoe on white, large */}
-      <div style={{position:"relative",width:"100%",paddingBottom:"100%",background:"#f5f5f5",overflow:"hidden"}}>
+      <div style={{position:"relative",width:"100%",paddingBottom:"100%",background:"#f5f5f5",overflow:"hidden",borderRadius:0}}>
         <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
           <ShoeImage shoe={shoe}/>
         </div>
@@ -911,7 +911,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             {page==="plp" && (
               <>
                 <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,background:"#fff",transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                   {currentGrid.map(shoe=>(
                     <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                   ))}
