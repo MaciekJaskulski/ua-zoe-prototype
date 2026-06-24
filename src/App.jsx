@@ -632,14 +632,14 @@ function CompareTable({ onRowClick }) {
         <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{padding:"0 12px 16px"}}>
+            <div key={s.id} style={{padding:"0 16px 16px",background:"#fff"}}>
               <div
                 onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}
-                style={{cursor:s.id==="lokedi"?"pointer":"default",background:"#f7f7f7",borderRadius:4,height:210,display:"flex",alignItems:"center",justifyContent:"center",padding:16,marginBottom:12}}
+                style={{position:"relative",width:"100%",aspectRatio:"354/443",background:"#f0f0f0",overflow:"hidden",marginBottom:10,cursor:s.id==="lokedi"?"pointer":"default"}}
               >
-                <ShoeImage shoe={s} height={210} imgHeight={190}/>
+                <img src={s.img} alt={s.name} style={{width:"100%",height:"100%",objectFit:"contain",display:"block",padding:"30px",boxSizing:"border-box"}} onError={e=>{e.target.style.display="none"}}/>
               </div>
-              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:700,fontSize:14,marginBottom:3,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
+              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:600,fontSize:14,marginBottom:2,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
               <div style={{fontSize:12,color:"#777",marginBottom:4}}>{s.sub}</div>
               <div style={{fontWeight:700,fontSize:15,color:"#111"}}>{s.price}</div>
             </div>
