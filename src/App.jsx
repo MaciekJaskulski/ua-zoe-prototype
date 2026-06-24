@@ -595,14 +595,8 @@ function CompareModal({ onConfirm, onClose }) {
         </div>
         <div style={{display:"flex",gap:16,marginBottom:24}}>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{flex:1,border:"1px solid #eee",borderRadius:8,padding:14}}>
-              <ShoeImage shoe={s} height={120} imgHeight={108}/>
-              <div style={{fontWeight:600,fontSize:13,marginBottom:2,color:"#111"}}>{s.name}</div>
-              <div style={{fontSize:11,color:"#777",marginBottom:8}}>{s.sub}</div>
-              <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
-                {s.tags.map((t,i)=><span key={i} style={{background:UA_RED,color:"#fff",fontSize:10,fontWeight:600,padding:"2px 7px",borderRadius:3}}>{t}</span>)}
-              </div>
-              <div style={{fontWeight:700,fontSize:14,color:"#111"}}>{s.price}</div>
+            <div key={s.id} style={{flex:1}}>
+              <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
             </div>
           ))}
         </div>
@@ -632,16 +626,8 @@ function CompareTable({ onRowClick }) {
         <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{padding:"0 16px 16px",background:"#fff"}}>
-              <div
-                onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}
-                style={{position:"relative",width:"100%",aspectRatio:"354/443",background:"#f0f0f0",overflow:"hidden",marginBottom:10,cursor:s.id==="lokedi"?"pointer":"default"}}
-              >
-                <img src={s.img} alt={s.name} style={{width:"100%",height:"100%",objectFit:"contain",display:"block",padding:"30px",boxSizing:"border-box"}} onError={e=>{e.target.style.display="none"}}/>
-              </div>
-              <div onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }} style={{fontWeight:600,fontSize:14,marginBottom:2,color:s.id==="lokedi"?"#185FA5":"#111",cursor:s.id==="lokedi"?"pointer":"default",lineHeight:1.3}}>{s.name}</div>
-              <div style={{fontSize:12,color:"#777",marginBottom:4}}>{s.sub}</div>
-              <div style={{fontWeight:700,fontSize:15,color:"#111"}}>{s.price}</div>
+            <div key={s.id} style={{padding:"0 16px 16px",cursor:s.id==="lokedi"?"pointer":"default"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
+              <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
             </div>
           ))}
         </div>
