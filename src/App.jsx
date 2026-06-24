@@ -362,73 +362,114 @@ function CLPPage() {
 }
 
 /* ─── SHOE IMAGE with fallback ──────────────────────────────────────────────── */
-function ShoeImage({ shoe, height=210, imgHeight=190 }) {
+function ShoeImage({ shoe, height, imgHeight }) {
   const [failed, setFailed] = useState(false);
-  // Try alternate URL patterns on error
   const urls = [shoe.img].filter(Boolean);
   const [urlIdx, setUrlIdx] = useState(0);
 
+  // Used in comparison table with explicit height
+  const isAbsolute = !height;
+
+  const containerStyle = isAbsolute
+    ? {position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",background:"#f5f5f5"}
+    : {background:"#f5f5f5",height,display:"flex",alignItems:"center",justifyContent:"center"};
+
+  const imgStyle = isAbsolute
+    ? {width:"100%",height:"100%",objectFit:"contain",padding:16,boxSizing:"border-box"}
+    : {width:"100%",height:"100%",objectFit:"contain"};
+
+  const fallbackStyle = isAbsolute
+    ? {position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,background:"#f5f5f5"}
+    : {background:"#f0f0f0",height,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6};
+
   if (failed || !shoe.img) {
     return (
-      <div style={{background:"#f0f0f0",height,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6}}>
-        <div style={{fontSize:32}}>👟</div>
+      <div style={fallbackStyle}>
+        <div style={{fontSize:36}}>👟</div>
         <div style={{fontSize:11,color:"#999",textAlign:"center",padding:"0 8px"}}>{shoe.name}</div>
       </div>
     );
   }
   return (
-    <div style={{background:"#f7f7f7",height,display:"flex",alignItems:"center",justifyContent:"center",padding:0,overflow:"hidden"}}>
+    <div style={containerStyle}>
       <img
         src={urlIdx < urls.length ? urls[urlIdx] : urls[0]}
         alt={shoe.name}
-        style={{width:"100%",height:"100%",objectFit:"contain"}}
+        style={imgStyle}
         onError={()=>{ if(urlIdx < urls.length-1) setUrlIdx(i=>i+1); else setFailed(true); }}
       />
     </div>
   );
 }
 
+
 /* ─── PRODUCT CARD (grid) ───────────────────────────────────────────────────── */
 function ProductCard({ shoe, compareSelected, onCompareToggle }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div style={{background:"#fff",border:"1px solid #eee",borderRadius:2,overflow:"hidden",position:"relative",transition:"box-shadow .2s"}}>
-      <div style={{position:"absolute",top:10,right:10,zIndex:1,cursor:"pointer",fontSize:18,color:"#bbb"}}>♡</div>
-      <ShoeImage shoe={shoe} height={260} imgHeight={260}/>
-      <div style={{padding:"8px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <button onClick={()=>onCompareToggle(shoe)} style={{background:compareSelected?"#333":UA_BLACK,color:"#fff",border:"none",borderRadius:20,padding:"6px 16px",fontSize:12,fontWeight:500,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
-          {compareSelected?"✓ Compare":"Compare"}
+    <div
+      onMouseEnter={()=>setHovered(true)}
+      onMouseLeave={()=>setHovered(false)}
+      style={{background:"#fff",position:"relative",cursor:"pointer",transition:"box-shadow .2s",boxShadow:hovered?"0 4px 24px rgba(0,0,0,0.10)":"none"}}
+    >
+      {/* Wishlist */}
+      <div style={{position:"absolute",top:14,right:14,zIndex:2,cursor:"pointer",color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
+
+      {/* Image area — tall, clean, no padding */}
+      <div style={{background:"#f5f5f5",position:"relative",overflow:"hidden",aspectRatio:"1/1"}}>
+        <ShoeImage shoe={shoe} height={"100%"} imgHeight={"100%"}/>
+
+        {/* Bag icon bottom right — only on hover */}
+        {hovered && (
+          <div style={{position:"absolute",bottom:14,right:14,background:UA_BLACK,borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:"#fff",fontSize:16,boxShadow:"0 2px 8px rgba(0,0,0,0.2)"}}>
+            🛍
+          </div>
+        )}
+      </div>
+
+      {/* Color swatches */}
+      <div style={{padding:"10px 14px 0",display:"flex",gap:5,flexWrap:"wrap"}}>
+        {shoe.colors.map((c,i)=>(
+          <div key={i} style={{width:14,height:14,borderRadius:"50%",background:c,border:"1.5px solid #e0e0e0",cursor:"pointer"}}/>
+        ))}
+      </div>
+
+      {/* Info */}
+      <div style={{padding:"8px 14px 14px"}}>
+        <div style={{fontSize:14,fontWeight:600,color:"#111",marginBottom:2,lineHeight:1.3}}>{shoe.name}</div>
+        <div style={{fontSize:12,color:"#777",marginBottom:10,lineHeight:1.4}}>{shoe.sub}</div>
+        <div style={{fontSize:15,fontWeight:700,color:"#111",marginBottom:10}}>{shoe.price}</div>
+
+        {/* Compare button — stays as required */}
+        <button
+          onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
+          style={{
+            background:compareSelected ? UA_BLACK : "transparent",
+            color:compareSelected ? "#fff" : "#111",
+            border:"1.5px solid #111",
+            borderRadius:2,
+            padding:"7px 16px",
+            fontSize:12,
+            fontWeight:600,
+            cursor:"pointer",
+            letterSpacing:.3,
+            transition:"background .15s, color .15s",
+            display:"flex",
+            alignItems:"center",
+            gap:6,
+          }}
+        >
+          {compareSelected && <span style={{fontSize:11}}>✓</span>}
+          Compare
         </button>
-        <div style={{background:UA_BLACK,borderRadius:"50%",width:30,height:30,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:"#fff",fontSize:14}}>🛍</div>
-      </div>
-      <div style={{padding:"0 12px 6px",display:"flex",gap:4,flexWrap:"wrap"}}>
-        {shoe.colors.map((c,i)=><div key={i} style={{width:16,height:16,borderRadius:"50%",background:c,border:"1px solid #ddd"}}/>)}
-      </div>
-      <div style={{padding:"4px 12px 14px"}}>
-        <div style={{fontWeight:600,fontSize:13,marginBottom:2}}>{shoe.name}</div>
-        <div style={{fontSize:12,color:"#777",marginBottom:6}}>{shoe.sub}</div>
-        <div style={{fontWeight:700,fontSize:14,marginBottom:4}}>{shoe.price}</div>
-        <div style={{fontSize:11,color:UA_GREEN,fontWeight:500}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
+
+        <div style={{fontSize:11,color:"#2e7d32",fontWeight:500,marginTop:8}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
       </div>
     </div>
   );
 }
 
-/* ─── CITATION BAR ───────────────────────────────────────────────────────────── */
-function CitationBar({ sources }) {
-  return (
-    <div style={{display:"flex",alignItems:"center",gap:8,marginTop:8}}>
-      <span style={{fontSize:12,color:"#555",fontWeight:400}}>{sources.length} source{sources.length!==1?"s":""}</span>
-      <div style={{display:"flex",gap:4}}>
-        {sources.map((s,i)=>(
-          <a key={i} href={s.url} target="_blank" rel="noreferrer" title={s.label}
-            style={{width:22,height:22,borderRadius:"50%",background:s.color||"#c8102e",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#fff",textDecoration:"none",flexShrink:0,letterSpacing:-0.3}}>
-            {s.abbr}
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 /* ─── ZOE CHAT ──────────────────────────────────────────────────────────────── */
 function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp, inputVal, setInputVal, onSend }) {
@@ -541,7 +582,9 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
 function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   return (
     <div style={{padding:"20px 24px 0",fontFamily:"Inter,sans-serif"}}>
-      <h1 style={{fontSize:22,fontWeight:700,marginBottom:14,color:"#111"}}>Products ({count})</h1>
+      <div style={{fontSize:12,color:"#777",marginBottom:8}}>Sports / Running</div>
+      <h1 style={{fontSize:28,fontWeight:800,marginBottom:14,color:"#111",letterSpacing:-.5}}>Running Shoes</h1>
+      <div style={{fontSize:13,color:"#777",marginBottom:14}}>{count} Items</div>
       <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:10}}>
         {["Sort by","Size","Color","Price"].map(f=>(
           <button key={f} style={{border:"1px solid #ccc",background:"#fff",padding:"6px 14px",borderRadius:4,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:4,color:"#333"}}>
@@ -886,7 +929,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-              <div key={gridKey} style={{padding:"12px 24px 40px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+              <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:chatOpen?"repeat(2,1fr)":"repeat(3,1fr)",gap:24,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                 ))}
