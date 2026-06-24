@@ -1,4 +1,24 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e) { return { error: e }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{padding:40,fontFamily:"monospace",color:"red",whiteSpace:"pre-wrap"}}>
+          <strong>JS Error caught:</strong>{"
+"}
+          {this.state.error.toString()}{"
+
+"}
+          {this.state.error.stack}
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 /* ─── COLOURS ──────────────────────────────────────────────────────────────── */
 const UA_RED    = "#c8102e";
@@ -678,7 +698,7 @@ function Footer() {
 }
 
 /* ─── MAIN APP ───────────────────────────────────────────────────────────────── */
-export default function App() {
+export function AppInner() {
   const [page, setPage]                   = useState("clp");
   const [searchActive, setSearchActive]   = useState(false);
   const [searchQuery, setSearchQuery]     = useState("");
@@ -926,3 +946,5 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
     </div>
   );
 }
+
+export default function App() { return <ErrorBoundary><AppInner/></ErrorBoundary>; }
