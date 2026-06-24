@@ -708,20 +708,22 @@ export function AppInner() {
   const [showModal, setShowModal]         = useState(false);
   const [chatInput, setChatInput]         = useState("");
   const [chatOpen, setChatOpen]           = useState(false);
+  const streamRef = useRef(null);
 
   const pushUser = (text) => setMessages(p=>[...p,{from:"user",text}]);
 
   // Stream initial message on mount and whenever page resets to clp->plp
   const streamInitial = (obj) => {
+    if (streamRef.current) clearInterval(streamRef.current);
     const fullText = obj.text || "";
     setMessages([{from:"zoe", ...obj, text:"", streaming:true}]);
     let i = 0;
-    const interval = setInterval(() => {
+    streamRef.current = setInterval(() => {
       i += 2;
       setMessages(p => {
         const msgs = [...p];
         const last = msgs[msgs.length - 1];
-        if (!last || last.from !== "zoe") { clearInterval(interval); return msgs; }
+        if (!last || last.from !== "zoe") { clearInterval(streamRef.current); return msgs; }
         const done = i >= fullText.length;
         msgs[msgs.length - 1] = {
           ...last,
@@ -729,7 +731,7 @@ export function AppInner() {
           streaming: !done,
           chips: done ? obj.chips : undefined,
         };
-        if (done) clearInterval(interval);
+        if (done) clearInterval(streamRef.current);
         return msgs;
       });
     }, 30);
@@ -742,6 +744,7 @@ export function AppInner() {
   }, [chatOpen]);
 
   const pushZoe = (obj) => {
+    if (streamRef.current) clearInterval(streamRef.current);
     const fullText = obj.text || "";
     // Add message with empty text first, then stream chars in
     setMessages(p => [...p, {from:"zoe", ...obj, text:"", streaming:true}]);
@@ -769,6 +772,7 @@ export function AppInner() {
         return msgs;
       });
     }, 30);
+    streamRef.current = interval;
   };
 
   /* apply grid state from a script step */
