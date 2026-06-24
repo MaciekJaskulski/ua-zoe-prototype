@@ -490,7 +490,7 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
   );
 
   return (
-    <div style={{width:360,minWidth:360,background:"#fff",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #e8e8e8",fontFamily:"Inter,sans-serif",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
+    <div style={{width:"100%",background:"#fff",display:"flex",flexDirection:"column",height:"100%",borderRight:"1px solid #e8e8e8",fontFamily:"Inter,sans-serif",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
       {/* Header */}
       <div style={{padding:"16px 18px 14px",borderBottom:"1px solid #f0f0f0",display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:36,height:36,borderRadius:"50%",background:UA_RED,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#fff",fontSize:15,flexShrink:0,letterSpacing:-0.5}}>Z</div>
@@ -899,35 +899,49 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
 
       {page==="clp" && <CLPPage/>}
 
-      {(page==="plp"||page==="comparison") && (
-        <div style={{display:"flex",height:"calc(100vh - 113px)"}}>
-          {chatOpen && (
-            <div style={{animation:"slideIn 0.3s ease forwards",overflow:"hidden"}}>
-              <style>{`@keyframes slideIn { from { width:0; opacity:0; } to { width:360px; opacity:1; } }`}</style>
-              <ZoeChat
-                messages={messages}
-                onChip={handleChip}
-                onSuggestedQ={handleSuggestedQ}
-                onSuggestedAction={handleSuggestedAction}
-                onFollowUp={handleSuggestedAction}
-                inputVal={chatInput}
-                setInputVal={setChatInput}
-                onSend={handleSend}
-              />
-            </div>
-          )}
-          {page==="plp" && (
-            <div style={{flex:1,overflowY:"auto"}}>
-              <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-              <div key={gridKey} style={{padding:"16px 60px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
-                {currentGrid.map(shoe=>(
-                  <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
-                ))}
+            {(page==="plp"||page==="comparison") && (
+        <div style={{display:"grid",gridTemplateColumns:"56px 360px 1fr 56px",height:"calc(100vh - 113px)",overflow:"hidden"}}>
+
+          {/* col 1 — left margin */}
+          <div/>
+
+          {/* col 2 — chat */}
+          <div style={{borderRight:"1px solid #e8e8e8",overflow:"hidden",background:"#fff"}}>
+            {chatOpen && (
+              <div style={{animation:"slideIn 0.3s ease forwards",height:"100%"}}>
+                <style>{`@keyframes slideIn { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }`}</style>
+                <ZoeChat
+                  messages={messages}
+                  onChip={handleChip}
+                  onSuggestedQ={handleSuggestedQ}
+                  onSuggestedAction={handleSuggestedAction}
+                  onFollowUp={handleSuggestedAction}
+                  inputVal={chatInput}
+                  setInputVal={setChatInput}
+                  onSend={handleSend}
+                />
               </div>
-              <Footer/>
-            </div>
-          )}
-          {page==="comparison" && <CompareTable onRowClick={(obj)=>{ if(obj){ pushUser(obj.userQ); setTimeout(()=>pushZoe({text:obj.text, suggestedQs:obj.qs}),400); } }}/>}
+            )}
+          </div>
+
+          {/* col 3 — content */}
+          <div style={{overflowY:"auto",height:"100%"}}>
+            {page==="plp" && (
+              <>
+                <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
+                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+                  {currentGrid.map(shoe=>(
+                    <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
+                  ))}
+                </div>
+                <Footer/>
+              </>
+            )}
+            {page==="comparison" && <CompareTable onRowClick={(obj)=>{ if(obj){ pushUser(obj.userQ); setTimeout(()=>pushZoe({text:obj.text, suggestedQs:obj.qs}),400); } }}/>}
+          </div>
+
+          {/* col 4 — right margin */}
+          <div/>
         </div>
       )}
 
