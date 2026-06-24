@@ -91,7 +91,7 @@ Everything in the shoe is engineered to work with that plate:
 • 221g — among the lightest marathon shoes on the market
 • 2mm heel drop — positions your foot to transfer energy directly into the plate's flex point
 
-It was co-developed with Sharon Lokedi, who wore it to win the Boston Marathon 2025 and set a course record. It's a precision race instrument — every gram and every layer of it is there for a reason.`
+It was co-developed with Sharon Lokedi, who wore it to win the Boston Marathon 2025 and set a course record. It's a precision race instrument — every gram and every layer of it is there for a reason.`;
 
 const PRICE_ANSWER_SHORT = `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. It's the same technology that helped Sharon Lokedi win Boston 2025. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost. Put simply: the Lokedi PE is a race-day weapon, the Distance is your training workhorse.`;
 
