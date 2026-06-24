@@ -400,44 +400,51 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
     <div
       onMouseEnter={()=>setHovered(true)}
       onMouseLeave={()=>setHovered(false)}
-      style={{background:"#fff",position:"relative",cursor:"pointer"}}
+      style={{position:"relative",cursor:"pointer",background:"#fff"}}
     >
-      {/* Wishlist */}
-      <div style={{position:"absolute",top:12,right:12,zIndex:2,color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
-
-      {/* Image — no background box, shoe on white, large */}
-      <div style={{position:"relative",width:"100%",paddingBottom:"100%",background:"#f5f5f5",overflow:"hidden",borderRadius:0}}>
-        <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <ShoeImage shoe={shoe}/>
+      {/* Image */}
+      <div style={{position:"relative",width:"100%",aspectRatio:"354/443",background:"#f0f0f0",overflow:"hidden"}}>
+        <img
+          src={shoe.img}
+          alt={shoe.name}
+          style={{width:"100%",height:"100%",objectFit:"contain",display:"block",padding:"30px",boxSizing:"border-box"}}
+          onError={e=>{e.target.style.display="none"}}
+        />
+        {/* Quick add bag icon */}
+        <div style={{position:"absolute",bottom:10,right:10,opacity:hovered?1:0,transition:"opacity .2s"}}>
+          <div style={{background:"#111",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14}}>🛍</div>
         </div>
-        {/* Bag icon bottom right on hover */}
-        {hovered && (
-          <div style={{position:"absolute",bottom:12,right:12,background:"#111",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:15}}>
-            🛍
-          </div>
-        )}
+        {/* Wishlist */}
+        <div style={{position:"absolute",top:10,right:10,color:"#555",fontSize:18,lineHeight:1}}>♡</div>
       </div>
 
-      {/* Color swatches */}
-      <div style={{padding:"10px 0 6px",display:"flex",gap:5}}>
+      {/* Color swatches — square chips like UA */}
+      <div style={{padding:"8px 0 4px",display:"flex",gap:4,alignItems:"center"}}>
         {shoe.colors.map((c,i)=>(
-          <div key={i} style={{width:14,height:14,borderRadius:"50%",background:c,border:"1px solid #ddd"}}/>
+          <div key={i} style={{width:20,height:20,borderRadius:4,background:c,border:"1px solid #e0e0e0",flexShrink:0}}/>
         ))}
+        <span style={{fontSize:12,color:"#555",marginLeft:4}}>{shoe.colors.length} Colors</span>
       </div>
 
-      {/* Info */}
-      <div style={{paddingBottom:14}}>
-        <div style={{fontSize:14,fontWeight:600,color:"#111",marginBottom:2,lineHeight:1.3}}>{shoe.name}</div>
-        <div style={{fontSize:12,color:"#777",marginBottom:8}}>{shoe.sub}</div>
-        <div style={{fontSize:14,fontWeight:700,color:"#111",marginBottom:10}}>{shoe.price}</div>
-        <button
-          onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
-          style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:100,padding:"8px 20px",fontSize:12,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:6,opacity:compareSelected?1:0.75}}
-        >
-          {compareSelected && <span>✓</span>}Compare
-        </button>
-        <div style={{fontSize:11,color:"#2e7d32",fontWeight:500,marginTop:8}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
+      {/* Name + sub */}
+      <div style={{paddingBottom:4}}>
+        <div style={{fontSize:14,fontWeight:600,color:"#111",lineHeight:1.3}}>{shoe.name}</div>
+        <div style={{fontSize:12,color:"#777",marginTop:2,lineHeight:1.4}}>{shoe.sub}</div>
       </div>
+
+      {/* Price */}
+      <div style={{fontSize:14,fontWeight:700,color:"#111",margin:"4px 0 10px"}}>{shoe.price}</div>
+
+      {/* Compare — kept as required, black pill */}
+      <button
+        onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
+        style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:100,padding:"7px 18px",fontSize:12,fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:5,marginBottom:8}}
+      >
+        {compareSelected && <span style={{fontSize:10}}>✓</span>}Compare
+      </button>
+
+      {/* Sale tag */}
+      <div style={{fontSize:11,color:"#2e7d32",fontWeight:500}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
     </div>
   );
 }
@@ -911,7 +918,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             {page==="plp" && (
               <>
                 <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,background:"#fff",transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+                <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                   {currentGrid.map(shoe=>(
                     <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                   ))}
