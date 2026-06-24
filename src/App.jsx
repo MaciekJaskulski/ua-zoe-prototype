@@ -568,51 +568,10 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
   );
 }
 
-/* ─── PLP SIDEBAR ────────────────────────────────────────────────────────────── */
-function PLPSidebar() {
-  const [open, setOpen] = useState({});
-  const toggle = (k) => setOpen(p=>({...p,[k]:!p[k]}));
-  const filters = ["Gender","Product Category","Product Type","Size","Color","Fit","Price","Age Group"];
-  return (
-    <div style={{width:200,minWidth:200,borderRight:"1px solid #e8e8e8",padding:"24px 0",fontFamily:"Inter,sans-serif",overflowY:"auto",background:"#fff",flexShrink:0}}>
-      {/* Category nav */}
-      <div style={{padding:"0 20px 24px",borderBottom:"1px solid #e8e8e8"}}>
-        <div style={{fontWeight:700,fontSize:13,color:"#111",marginBottom:14}}>Running</div>
-        {["Clothing","Shoes","Accessories"].map(l=>(
-          <div key={l} style={{fontSize:13,color:"#555",padding:"5px 0 5px 12px",cursor:"pointer"}}>{l}</div>
-        ))}
-        <div style={{borderTop:"1px solid #e8e8e8",margin:"10px 0"}}/>
-        {["Velociti collection","Guides and training advice"].map(l=>(
-          <div key={l} style={{fontSize:13,color:"#555",padding:"5px 0 5px 12px",cursor:"pointer"}}>{l}</div>
-        ))}
-      </div>
-      {/* Filter accordions */}
-      <div>
-        {filters.map(f=>(
-          <div key={f} style={{borderBottom:"1px solid #e8e8e8"}}>
-            <div
-              onClick={()=>toggle(f)}
-              style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 20px",cursor:"pointer",fontSize:13,fontWeight:500,color:"#111"}}
-            >
-              {f}
-              <span style={{fontSize:16,color:"#888",lineHeight:1}}>{open[f]?"−":"+"}</span>
-            </div>
-            {open[f] && (
-              <div style={{padding:"0 20px 14px",fontSize:12,color:"#777"}}>
-                <div style={{padding:"3px 0",cursor:"pointer"}}>All</div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ─── PLP HEADER ─────────────────────────────────────────────────────────────── */
 function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   return (
-    <div style={{padding:"20px 32px 0",fontFamily:"Inter,sans-serif"}}>
+    <div style={{padding:"20px 60px 0",fontFamily:"Inter,sans-serif"}}>
       <div style={{fontSize:12,color:"#777",marginBottom:8}}>Sports / Running</div>
       <h1 style={{fontSize:28,fontWeight:800,marginBottom:14,color:"#111",letterSpacing:-.5}}>Running Shoes</h1>
       <div style={{fontSize:13,color:"#777",marginBottom:14}}>{count} Items</div>
@@ -958,17 +917,14 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             </div>
           )}
           {page==="plp" && (
-            <div style={{flex:1,display:"flex",height:"100%",overflow:"hidden"}}>
-              <PLPSidebar/>
-              <div style={{flex:1,overflowY:"auto",height:"100%"}}>
+            <div style={{flex:1,overflowY:"auto"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-              <div key={gridKey} style={{padding:"16px 32px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+              <div key={gridKey} style={{padding:"16px 60px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                 ))}
               </div>
               <Footer/>
-              </div>
             </div>
           )}
           {page==="comparison" && <CompareTable onRowClick={(obj)=>{ if(obj){ pushUser(obj.userQ); setTimeout(()=>pushZoe({text:obj.text, suggestedQs:obj.qs}),400); } }}/>}
