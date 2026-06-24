@@ -6,13 +6,8 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.error) {
       return (
-        <div style={{padding:40,fontFamily:"monospace",color:"red",whiteSpace:"pre-wrap"}}>
-          <strong>JS Error caught:</strong>{"
-"}
-          {this.state.error.toString()}{"
-
-"}
-          {this.state.error.stack}
+        <div style={{padding:40,fontFamily:"monospace",color:"red"}}>
+          <strong>Error: </strong>{this.state.error.toString()}
         </div>
       );
     }
