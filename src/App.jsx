@@ -410,12 +410,21 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
           style={{width:"100%",height:"100%",objectFit:"contain",display:"block",padding:"30px",boxSizing:"border-box"}}
           onError={e=>{e.target.style.display="none"}}
         />
-        {/* Quick add bag icon */}
+        {/* Bag icon */}
         <div style={{position:"absolute",bottom:10,right:10,opacity:hovered?1:0,transition:"opacity .2s"}}>
           <div style={{background:"#111",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14}}>🛍</div>
         </div>
         {/* Wishlist */}
         <div style={{position:"absolute",top:10,right:10,color:"#555",fontSize:18,lineHeight:1}}>♡</div>
+        {/* Compare button — bottom left of image */}
+        <div style={{position:"absolute",bottom:10,left:10}}>
+          <button
+            onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
+            style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:100,padding:"7px 18px",fontSize:12,fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:5,opacity:compareSelected?1:0.85}}
+          >
+            {compareSelected && <span style={{fontSize:10}}>✓</span>}Compare
+          </button>
+        </div>
       </div>
 
       {/* Color swatches — square chips like UA */}
@@ -434,14 +443,6 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
 
       {/* Price */}
       <div style={{fontSize:14,fontWeight:700,color:"#111",margin:"4px 0 10px"}}>{shoe.price}</div>
-
-      {/* Compare — kept as required, black pill */}
-      <button
-        onClick={(e)=>{ e.stopPropagation(); onCompareToggle(shoe); }}
-        style={{background:UA_BLACK,color:"#fff",border:"none",borderRadius:100,padding:"7px 18px",fontSize:12,fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:5,marginBottom:8}}
-      >
-        {compareSelected && <span style={{fontSize:10}}>✓</span>}Compare
-      </button>
 
       {/* Sale tag */}
       <div style={{fontSize:11,color:"#2e7d32",fontWeight:500}}>SALE FOR MEMBERS ONLY. LOG IN BEFORE SHOPPING.</div>
