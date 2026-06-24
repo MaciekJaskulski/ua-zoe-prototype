@@ -368,9 +368,9 @@ function ShoeImage({ shoe, height, imgHeight }) {
   const [urlIdx, setUrlIdx] = useState(0);
 
   // Used in comparison table with explicit height
-  const containerStyle = {background:"#f5f5f5",height:height||"100%",display:"flex",alignItems:"center",justifyContent:"center"};
+  const containerStyle = {background:"#fff",height:height||"100%",display:"flex",alignItems:"center",justifyContent:"center"};
   const imgStyle = {maxWidth:"100%",maxHeight:"100%",objectFit:"contain",padding:12,boxSizing:"border-box"};
-  const fallbackStyle = {background:"#f0f0f0",height:height||"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6};
+  const fallbackStyle = {background:"#f5f5f5",height:height||"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6};
 
   if (failed || !shoe.img) {
     return (
@@ -407,7 +407,7 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
       <div style={{position:"absolute",top:14,right:14,zIndex:2,cursor:"pointer",color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
 
       {/* Image area — tall, clean, no padding */}
-      <div style={{background:"#f5f5f5",position:"relative",overflow:"hidden",height:280}}>
+      <div style={{background:"#fff",position:"relative",overflow:"hidden",height:280,borderBottom:"1px solid #f0f0f0"}}>
         <ShoeImage shoe={shoe} height={280}/>
 
         {/* Bag icon bottom right — only on hover */}
@@ -571,7 +571,7 @@ function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp
 /* ─── PLP HEADER ─────────────────────────────────────────────────────────────── */
 function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   return (
-    <div style={{padding:"20px 24px 0",fontFamily:"Inter,sans-serif"}}>
+    <div style={{padding:"20px 48px 0",fontFamily:"Inter,sans-serif"}}>
       <div style={{fontSize:12,color:"#777",marginBottom:8}}>Sports / Running</div>
       <h1 style={{fontSize:28,fontWeight:800,marginBottom:14,color:"#111",letterSpacing:-.5}}>Running Shoes</h1>
       <div style={{fontSize:13,color:"#777",marginBottom:14}}>{count} Items</div>
@@ -919,7 +919,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-              <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+              <div key={gridKey} style={{padding:"16px 48px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                 ))}
