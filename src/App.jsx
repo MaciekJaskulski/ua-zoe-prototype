@@ -368,19 +368,9 @@ function ShoeImage({ shoe, height, imgHeight }) {
   const [urlIdx, setUrlIdx] = useState(0);
 
   // Used in comparison table with explicit height
-  const isAbsolute = !height;
-
-  const containerStyle = isAbsolute
-    ? {position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",background:"#f5f5f5"}
-    : {background:"#f5f5f5",height,display:"flex",alignItems:"center",justifyContent:"center"};
-
-  const imgStyle = isAbsolute
-    ? {width:"100%",height:"100%",objectFit:"contain",padding:16,boxSizing:"border-box"}
-    : {width:"100%",height:"100%",objectFit:"contain"};
-
-  const fallbackStyle = isAbsolute
-    ? {position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,background:"#f5f5f5"}
-    : {background:"#f0f0f0",height,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6};
+  const containerStyle = {background:"#f5f5f5",height:height||"100%",display:"flex",alignItems:"center",justifyContent:"center"};
+  const imgStyle = {maxWidth:"100%",maxHeight:"100%",objectFit:"contain",padding:12,boxSizing:"border-box"};
+  const fallbackStyle = {background:"#f0f0f0",height:height||"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6};
 
   if (failed || !shoe.img) {
     return (
@@ -417,8 +407,8 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
       <div style={{position:"absolute",top:14,right:14,zIndex:2,cursor:"pointer",color:"#bbb",fontSize:20,lineHeight:1}}>♡</div>
 
       {/* Image area — tall, clean, no padding */}
-      <div style={{background:"#f5f5f5",position:"relative",overflow:"hidden",aspectRatio:"1/1"}}>
-        <ShoeImage shoe={shoe} height={"100%"} imgHeight={"100%"}/>
+      <div style={{background:"#f5f5f5",position:"relative",overflow:"hidden",height:280}}>
+        <ShoeImage shoe={shoe} height={280}/>
 
         {/* Bag icon bottom right — only on hover */}
         {hovered && (
@@ -929,7 +919,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
           {page==="plp" && (
             <div style={{flex:1,overflowY:"auto"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
-              <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:chatOpen?"repeat(2,1fr)":"repeat(3,1fr)",gap:24,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
+              <div key={gridKey} style={{padding:"16px 24px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:24,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
                   <ProductCard key={shoe.id} shoe={shoe} compareSelected={!!compareList.find(s=>s.id===shoe.id)} onCompareToggle={handleCompareToggle}/>
                 ))}
