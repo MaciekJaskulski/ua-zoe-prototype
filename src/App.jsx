@@ -843,6 +843,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
 
   /* freeform input */
   const handleSend = () => {
+    try {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
     if(isHeelOffsetQ(txt))  { setTimeout(()=>pushZoe({text:HEEL_OFFSET_ANSWER, suggestedQs:["How long does it take to adapt to a lower drop?","I'm a heel striker — which shoe suits me?","Can a low drop shoe cause injury?"]}),500); return; }
@@ -856,6 +857,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
       return;
     }
     setTimeout(()=>pushZoe({text:"Thanks for your question! For the most detailed answer I'd recommend checking the product page directly. Is there anything else I can help you with regarding these shoes?"}),450);
+    } catch(e) { console.error('handleSend error:', e); }
   };
 
   /* compare toggle */
@@ -894,7 +896,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             {(page==="plp"||page==="comparison") && (
         <div style={{display:"grid",gridTemplateColumns:"360px 1fr",height:"calc(100vh - 113px)",overflow:"hidden"}}>
 
-          {/* chat */
+          {/* chat */}
           <div style={{borderRight:"1px solid #e8e8e8",overflow:"hidden",background:"#fff"}}>
             {chatOpen && (
               <div style={{animation:"slideIn 0.3s ease forwards",height:"100%"}}>
