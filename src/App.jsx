@@ -958,9 +958,9 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
             </div>
           )}
           {page==="plp" && (
-            <div style={{flex:1,display:"flex",overflowY:"hidden"}}>
+            <div style={{flex:1,display:"flex",height:"100%",overflow:"hidden"}}>
               <PLPSidebar/>
-              <div style={{flex:1,overflowY:"auto"}}>
+              <div style={{flex:1,overflowY:"auto",height:"100%"}}>
               <PLPHeader count={productCount} filterTags={filterTags} onRemoveTag={t=>setFilterTags(p=>p.filter(x=>x!==t))} onOpenChat={()=>setChatOpen(true)}/>
               <div key={gridKey} style={{padding:"16px 32px 60px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:20,transition:"opacity 0.22s ease",opacity:gridVisible?1:0}}>
                 {currentGrid.map(shoe=>(
