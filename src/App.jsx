@@ -622,11 +622,11 @@ function CompareTable({ onRowClick }) {
   const rows=[["Price","£225","£145"],["Best for","Race day only","Long training runs"],["Cushioning","HOVR+ carbon plate","HOVR+ full-length"],["Weight","221g","298g"],["Heel offset","2mm","6mm"],["Weekly use","Race days only","3–5/week"],["Sizing","Half size up","True to size"]];
   return (
     <div style={{flex:1,overflowY:"auto",fontFamily:"Inter,sans-serif"}}>
-      <div style={{padding:"28px 32px 0"}}>
-        <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr"}}>
+      <div style={{padding:"28px 8px 0"}}>
+        <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr",alignItems:"start"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{padding:"0 16px 16px",cursor:s.id==="lokedi"?"pointer":"default"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
+            <div key={s.id} style={{cursor:s.id==="lokedi"?"pointer":"default",padding:"0 8px 16px"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
               <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
             </div>
           ))}
