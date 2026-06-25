@@ -651,8 +651,10 @@ function CompareTable({ onRowClick }) {
         <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr",alignItems:"start"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
-            <div key={s.id} style={{cursor:s.id==="lokedi"?"pointer":"default",padding:"0 8px 16px"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
-              <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
+            <div key={s.id} style={{padding:"0 8px 16px"}}>
+              <div style={{maxWidth:220,cursor:s.id==="lokedi"?"pointer":"default"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
+                <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
+              </div>
             </div>
           ))}
         </div>
@@ -665,7 +667,7 @@ function CompareTable({ onRowClick }) {
               onMouseLeave={e=>e.currentTarget.style.color="#333"}
             >
               {lbl}
-              <span style={{fontSize:10,color:"#bbb"}}>›</span>
+              <span title="Ask Zoe about it" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:14,height:14,borderRadius:"50%",background:"#e0e0e0",color:"#666",fontSize:9,fontWeight:700,cursor:"help",flexShrink:0}}>?</span>
             </div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{a}</div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{b}</div>
@@ -949,7 +951,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
           onConfirm={()=>{
             setShowModal(false);
             setPage("comparison");
-            streamInitial({ text:"Here's the full comparison between UA Velociti Elite 3 'Sharon Lokedi' PE and UA Velociti Distance! Feel free to ask me anything — price, carbon plate, heel offset, or which one suits you best." });
+            streamInitial({ text:"Here's a quick breakdown of the two shoes:\n\n🟢 Lokedi PE — £225\nCarbon plate · 221g · 2mm drop · Race day only\n\n🔵 Velociti Distance — £145\nHOVR+ foam · 298g · 6mm drop · 3–5×/week\n\nThe big difference: the Lokedi PE has a carbon fibre plate, the Distance doesn't. Ask me anything — price gap, cushioning, heel offset, or which one suits you best.", suggestedQs:["Why is there such a price difference?","Which shoe is better for a first marathon?","What does heel offset mean?"] });
           }}
           onClose={()=>setShowModal(false)}
         />
