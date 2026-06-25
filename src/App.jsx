@@ -462,6 +462,22 @@ function ProductCard({ shoe, compareSelected, onCompareToggle }) {
 }
 
 
+/* ─── CITATION BAR ──────────────────────────────────────────────────────────── */
+function CitationBar({ sources }) {
+  if (!sources || sources.length === 0) return null;
+  return (
+    <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
+      {sources.map((s,i) => (
+        <a key={i} href={s.url} target="_blank" rel="noreferrer"
+          style={{display:"inline-flex",alignItems:"center",gap:5,background:s.color||"#111",color:"#fff",borderRadius:4,padding:"3px 10px",fontSize:11,fontWeight:600,textDecoration:"none"}}>
+          <span>{s.abbr}</span>
+          <span style={{fontWeight:400,opacity:.85}}>{s.label}</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 /* ─── ZOE CHAT ──────────────────────────────────────────────────────────────── */
 function ZoeChat({ messages, onChip, onSuggestedQ, onSuggestedAction, onFollowUp, inputVal, setInputVal, onSend }) {
   const bottomRef = useRef(null);
