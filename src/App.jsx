@@ -74,21 +74,21 @@ function isRainQ(t){
   const s=t.toLowerCase();
   return s.includes("rain")||s.includes("wet")||s.includes("water")||s.includes("damp")||s.includes("weather")||s.includes("drizzle")||s.includes("downpour")||s.includes("rainy")||s.includes("moisture");
 }
-const HEEL_OFFSET_ANSWER = `Heel offset (or heel drop) is the height difference between your heel and forefoot in the shoe.
+const HEEL_OFFSET_ANSWER = `Heel offset is the height difference between your heel and forefoot in the shoe.
 
-The Lokedi PE has a 2mm drop — almost flat. This encourages a midfoot or forefoot strike, which transfers energy more directly into the carbon plate for maximum propulsion. It also means less cushioning under the heel, so it rewards efficient running form.
+The Lokedi PE has a 2mm drop — almost flat — which encourages a midfoot strike and transfers energy directly into the carbon plate. It rewards efficient form.
 
-The Distance has a 6mm drop — moderate and more forgiving. It works well for heel strikers and runners who haven't adapted to low-drop shoes. The extra heel height also helps protect your achilles and calves over high mileage.
+The Distance has a 6mm drop — more forgiving for heel strikers and better for protecting your achilles over long training miles.
 
-If you're used to standard trainers (8–12mm drop), jumping straight into the Lokedi PE's 2mm could strain your achilles. Easing in gradually — or using the Distance for training — is the smarter approach.`;
+If you're used to standard trainers (8–12mm), the Lokedi PE's 2mm requires gradual adaptation.`;
 
-const RAIN_ANSWER=`Neither shoe is built exclusively for wet weather, but they handle it differently.
+const RAIN_ANSWER=`Neither shoe is waterproof, but they handle rain differently.
 
-UA Velociti Distance: The breathable mesh upper absorbs water in heavy rain, adding a little weight mid-run. The rubber outsole provides solid grip on wet tarmac for training runs — most road runners find it perfectly usable in light to moderate rain.
+The Distance's mesh upper absorbs water in heavy rain, adding a little weight mid-run. It's perfectly usable in light to moderate rain for training.
 
-UA Velociti Elite 3 'Lokedi' PE: The Leno weave upper is more resistant to water absorption than standard mesh, keeping the shoe lighter for longer in wet conditions. The outsole was specifically micro-tuned for traction at top speed, including on wet roads — UA designed it to hold speed even when the road surface is slick.
+The Lokedi PE's Leno weave upper resists water absorption better than standard mesh, keeping it lighter for longer. The outsole is also micro-tuned for traction at top speed on wet roads.
 
-For race-day conditions that might turn wet, the Lokedi PE has the edge. For everyday wet-weather training, the Distance is more than adequate — just expect it to feel a touch heavier after a downpour.`;
+For a rainy race day, the Lokedi PE has the edge. For wet training runs, the Distance is more than adequate.`;
 
 /* ─── PRICE QUESTION DETECTION ───────────────────────────────────────────────── */
 function isPriceQ(t){
@@ -661,13 +661,13 @@ function CompareModal({ onConfirm, onClose }) {
 /* ─── COMPARISON TABLE ───────────────────────────────────────────────────────── */
 function CompareTable({ onRowClick }) {
   const ROW_RESPONSES = {
-    "Price":      { userQ: "Why is there such a big price difference?", text: `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost.`, qs: ["Can I use the Lokedi PE for training too?", "Is the carbon plate worth it for a first marathon?", "Which one offers better value for money?"] },
-    "Best for":   { userQ: "What is each shoe best for?", text: `The Lokedi PE is engineered exclusively for race day — its carbon plate and low 2mm drop are optimised for speed at peak effort, not daily mileage. The Distance is your training workhorse, built to absorb the cumulative load of 3–5 sessions a week across a full marathon prep block.`, qs: ["What pace does the Lokedi PE suit best?", "Can the Distance handle race day too?", "What if I only want to buy one shoe?"] },
-    "Cushioning": { userQ: "Can you tell me more about the cushioning?", text: `Both use HOVR+ foam, but differently. In the Distance, full-length HOVR+ prioritises comfort and protection over long miles — it's softer and more forgiving. In the Lokedi PE, the HOVR+ works in combination with the carbon fibre plate: the foam absorbs impact while the plate stores and releases energy, creating a propulsive snap that pure foam can't replicate.`, qs: ["What is UA HOVR?", "How does the carbon plate affect cushioning feel?", "Will the Lokedi PE feel harsh underfoot?"] },
-    "Weight":     { userQ: "How significant is the weight difference?", text: `The 77g difference matters more than it sounds. Over a marathon, that's roughly 3,200 extra grams lifted per foot with every stride. The Lokedi PE's Leno weave upper and minimal construction keep it race-light. The Distance carries more foam and a heavier mesh upper — worth it for training comfort, but not what you want on race day.`, qs: ["Does shoe weight really affect finish time?", "How does the Leno weave upper feel?", "Is the Distance too heavy for a half marathon?"] },
-    "Heel offset":{ userQ: "What does the heel offset difference mean?", text: `Heel offset is the height difference between your heel and forefoot. The Lokedi PE's 2mm drop encourages a midfoot strike that transfers energy directly into the carbon plate. The Distance's 6mm drop is more forgiving for heel strikers and protects your achilles over high mileage. If you're used to standard trainers (8–12mm), the Lokedi PE's 2mm requires gradual adaptation.`, qs: ["How long does it take to adapt to a lower drop?", "I'm a heel striker — which shoe suits me?", "Can a low drop shoe cause injury?"] },
-    "Weekly use": { userQ: "How often can I use each shoe per week?", text: `The carbon plate in the Lokedi PE isn't designed for repeated daily loading — using it for every run would wear it out faster and offer no training benefit over the Distance. Most elite runners keep their race shoe for race day and key workouts only. The Distance handles 3–5 sessions a week comfortably across a full training block.`, qs: ["How many km does the Lokedi PE last?", "Can I rotate both shoes in my training?", "What shoe should I use for tempo runs?"] },
-    "Sizing":     { userQ: "How does the sizing work for both shoes?", text: `The Lokedi PE runs small due to its snug Leno weave upper and race-fit construction — go half a size up. The Distance runs true to size, though if you're between sizes and doing long runs, a half size up gives your toes room when feet swell after 25km.`, qs: ["How do I measure my foot for the right size?", "Do feet swell significantly over a marathon?", "What if I'm between sizes for the Distance?"] },
+    "Price":      { userQ: "Why is there such a big price difference?", text: `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost.`, qs: ["Is the Lokedi PE worth the extra £80?", "Which shoe is better value for everyday training?", "How does the carbon plate affect durability?"] },
+    "Best for":   { userQ: "What is each shoe best for?", text: `The Lokedi PE is engineered exclusively for race day — its carbon plate and low 2mm drop are optimised for speed at peak effort, not daily mileage. The Distance is your training workhorse, built to absorb the cumulative load of 3–5 sessions a week across a full marathon prep block.`, qs: ["Can I race in the Distance if I don't have a Lokedi PE?", "Which shoe would suit a first marathon runner?", "What pace does the Lokedi PE suit best?"] },
+    "Cushioning": { userQ: "Can you tell me more about the cushioning?", text: `Both use HOVR+ foam, but differently. In the Distance, full-length HOVR+ prioritises comfort and protection over long miles — it's softer and more forgiving. In the Lokedi PE, the HOVR+ works in combination with the carbon fibre plate: the foam absorbs impact while the plate stores and releases energy, creating a propulsive snap that pure foam can't replicate.`, qs: ["What is UA HOVR?", "Which shoe is better for someone with knee pain?", "Does the Lokedi PE feel harsh compared to the Distance?"] },
+    "Weight":     { userQ: "How significant is the weight difference?", text: `The 77g difference matters more than it sounds. Over a marathon, that's roughly 3,200 extra grams lifted per foot with every stride. The Lokedi PE's Leno weave upper and minimal construction keep it race-light. The Distance carries more foam and a heavier mesh upper — worth it for training comfort, but not what you want on race day.`, qs: ["Would the Distance feel heavy compared to the Lokedi PE on race day?", "Is the 77g difference noticeable when running?", "How does the Leno weave upper affect fit?"] },
+    "Heel offset":{ userQ: "What does the heel offset difference mean?", text: `Heel offset is the height difference between your heel and forefoot. The Lokedi PE's 2mm drop encourages a midfoot strike that transfers energy directly into the carbon plate. The Distance's 6mm drop is more forgiving for heel strikers and protects your achilles over high mileage. If you're used to standard trainers (8–12mm), the Lokedi PE's 2mm requires gradual adaptation.`, qs: ["Which shoe suits a heel striker better?", "Can I train in the Distance and race in the Lokedi PE?", "How long does adapting to a lower drop take?"] },
+    "Weekly use": { userQ: "How often can I use each shoe per week?", text: `The carbon plate in the Lokedi PE isn't designed for repeated daily loading — using it for every run would wear it out faster and offer no training benefit over the Distance. Most elite runners keep their race shoe for race day and key workouts only. The Distance handles 3–5 sessions a week comfortably across a full training block.`, qs: ["Should I use both shoes in rotation?", "Which shoe is more durable over high mileage?", "Can I use the Lokedi PE for tempo training runs?"] },
+    "Sizing":     { userQ: "How does the sizing work for both shoes?", text: `The Lokedi PE runs small due to its snug Leno weave upper and race-fit construction — go half a size up. The Distance runs true to size, though if you're between sizes and doing long runs, a half size up gives your toes room when feet swell after 25km.`, qs: ["Should I go half a size up in both shoes?", "Does the Lokedi PE's fit feel more restrictive than the Distance?", "Do feet swell differently over a full marathon vs half?"] },
   };
   const rows=[["Price","£225","£145"],["Best for","Race day only","Long training runs"],["Cushioning","HOVR+ carbon plate","HOVR+ full-length"],["Weight","221g","298g"],["Heel offset","2mm","6mm"],["Weekly use","Race days only","3–5/week"],["Sizing","Half size up","True to size"]];
   return (
@@ -846,13 +846,9 @@ export function AppInner() {
   const handleSuggestedQ = (q) => {
     pushUser(q);
     if(q==="What is UA HOVR?" && page==="comparison") {
-      setTimeout(()=>pushZoe({text:`HOVR is UA's signature cushioning technology — the foundation of their entire performance footwear range.
+      setTimeout(()=>pushZoe({text:`HOVR is UA's cushioning technology that absorbs impact on landing and returns energy at push-off — runners describe it as "springy but controlled".
 
-It works in two stages: on landing, the foam compresses under your bodyweight, absorbing the impact force through your heel and midfoot. Rather than simply deadening that energy, HOVR then springs back, returning it as forward momentum at push-off. Runners consistently describe it as feeling "springy but controlled" — it absorbs the hard stuff and gives back the good stuff.
-
-HOVR+ is the upgraded version used in both shoes here. It's lighter and softer than standard HOVR, engineered specifically for distance running where your legs need to feel fresh at kilometre 35, not just kilometre 5.
-
-In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe to maximise cushioning across long training miles. In the Lokedi PE, HOVR+ works in combination with the carbon fibre plate — the foam handles impact absorption while the plate provides the propulsive snap that pure foam alone can't deliver.`, citations:PRICE_CITATIONS, suggestedQs:["How does HOVR+ differ from standard HOVR?","Which shoe has more HOVR+ foam?","Does cushioning affect speed?"]}),450);
+HOVR+ is the upgraded version in both shoes here. In the Velociti Distance, full-length HOVR+ maximises cushioning for long training miles. In the Lokedi PE, HOVR+ works alongside the carbon fibre plate — the foam absorbs impact while the plate provides the propulsive snap.`, citations:PRICE_CITATIONS, suggestedQs:["Which shoe offers more cushioning protection?","Does the carbon plate make the Lokedi PE feel stiffer?","Which shoe would suit a heel striker better?"]}),450);
     } else if(q==="What is UA HOVR?") {
       setTimeout(()=>{ const s=STEPS[10]; pushZoe({text:s.text,followUp:s.followUp}); setScriptStep(10); },450);
     } else if(isPriceQ(q)) {
@@ -883,8 +879,8 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
     try {
     const txt=chatInput.trim(); if(!txt) return; setChatInput("");
     pushUser(txt);
-    if(isHeelOffsetQ(txt))  { setTimeout(()=>pushZoe({text:HEEL_OFFSET_ANSWER, suggestedQs:["How long does it take to adapt to a lower drop?","I'm a heel striker — which shoe suits me?","Can a low drop shoe cause injury?"]}),500); return; }
-    if(isRainQ(txt))        { setTimeout(()=>pushZoe({text:RAIN_ANSWER, suggestedQs:["Does the Lokedi PE have any water-resistant coating?","Will wet conditions affect the carbon plate?","Which shoe dries faster after a wet run?"]}),500); return; }
+    if(isHeelOffsetQ(txt))  { setTimeout(()=>pushZoe({text:HEEL_OFFSET_ANSWER, suggestedQs:["Which shoe suits a heel striker better?","Can I train in the Distance and race in the Lokedi PE?","Can a low drop shoe cause injury?"]}),500); return; }
+    if(isRainQ(txt))        { setTimeout(()=>pushZoe({text:RAIN_ANSWER, suggestedQs:["Which shoe is safer to race in if rain is forecast?","Does water affect the carbon plate performance?","Which shoe dries faster after a wet run?"]}),500); return; }
     if(isPriceKeywordQ(txt)||isPriceQ(txt)) {
       if(page==="comparison") {
         setTimeout(()=>pushZoe({text:PRICE_ANSWER_SHORT, citations:PRICE_CITATIONS, suggestedQs:["Is the carbon plate worth it for a first marathon?","Can I use the Lokedi PE for training runs too?","Which one offers better value for money?"]}),500);
