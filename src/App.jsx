@@ -609,6 +609,31 @@ function PLPHeader({ count, filterTags, onRemoveTag, onOpenChat }) {
   );
 }
 
+/* ─── COMPARISON CARD (no buttons) ──────────────────────────────────────────── */
+function ComparisonCard({ shoe }) {
+  return (
+    <div style={{position:"relative",background:"#fff"}}>
+      <div style={{position:"relative",width:"100%",aspectRatio:"354/443",background:"#f0f0f0",overflow:"hidden"}}>
+        <img
+          src={shoe.img}
+          alt={shoe.name}
+          style={{width:"100%",height:"100%",objectFit:"contain",display:"block",padding:"30px",boxSizing:"border-box"}}
+          onError={e=>{e.target.style.display="none"}}
+        />
+      </div>
+      <div style={{padding:"8px 0 4px",display:"flex",gap:4,alignItems:"center"}}>
+        {shoe.colors.map((c,i)=>(
+          <div key={i} style={{width:20,height:20,borderRadius:4,background:c,border:"1px solid #e0e0e0",flexShrink:0}}/>
+        ))}
+        <span style={{fontSize:12,color:"#555",marginLeft:4}}>{shoe.colors.length} Colors</span>
+      </div>
+      <div style={{fontSize:14,fontWeight:600,color:"#111",lineHeight:1.3}}>{shoe.name}</div>
+      <div style={{fontSize:12,color:"#777",marginTop:2,marginBottom:4}}>{shoe.sub}</div>
+      <div style={{fontSize:14,fontWeight:700,color:"#111"}}>{shoe.price}</div>
+    </div>
+  );
+}
+
 /* ─── COMPARISON MODAL ─────────────────────────────────────────────────────── */
 function CompareModal({ onConfirm, onClose }) {
   return (
@@ -621,7 +646,7 @@ function CompareModal({ onConfirm, onClose }) {
         <div style={{display:"flex",gap:16,marginBottom:24}}>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
             <div key={s.id} style={{flex:1}}>
-              <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
+              <ComparisonCard shoe={s}/>
             </div>
           ))}
         </div>
@@ -647,13 +672,14 @@ function CompareTable({ onRowClick }) {
   const rows=[["Price","£225","£145"],["Best for","Race day only","Long training runs"],["Cushioning","HOVR+ carbon plate","HOVR+ full-length"],["Weight","221g","298g"],["Heel offset","2mm","6mm"],["Weekly use","Race days only","3–5/week"],["Sizing","Half size up","True to size"]];
   return (
     <div style={{flex:1,overflowY:"auto",fontFamily:"Inter,sans-serif"}}>
+      <style>{`.zoe-tooltip:hover .zoe-tooltip-text { opacity: 1 !important; }`}</style>
       <div style={{padding:"28px 8px 0"}}>
         <div style={{display:"grid",gridTemplateColumns:"180px 1fr 1fr",alignItems:"start"}}>
           <div/>
           {[SHOES.lokedi,SHOES.distance].map(s=>(
             <div key={s.id} style={{padding:"0 8px 16px"}}>
               <div style={{maxWidth:220,cursor:s.id==="lokedi"?"pointer":"default"}} onClick={()=>{ if(s.id==="lokedi") window.open("https://und3rarmour-zoe-pdp.vercel.app/#","_blank"); }}>
-                <ProductCard shoe={s} compareSelected={false} onCompareToggle={()=>{}}/>
+                <ComparisonCard shoe={s}/>
               </div>
             </div>
           ))}
@@ -667,7 +693,7 @@ function CompareTable({ onRowClick }) {
               onMouseLeave={e=>e.currentTarget.style.color="#333"}
             >
               {lbl}
-              <span title="Ask Zoe about it" style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:14,height:14,borderRadius:"50%",background:"#e0e0e0",color:"#666",fontSize:9,fontWeight:700,cursor:"help",flexShrink:0}}>?</span>
+              <span className="zoe-tooltip" style={{position:"relative",display:"inline-flex",alignItems:"center",justifyContent:"center",width:14,height:14,borderRadius:"50%",background:"#e0e0e0",color:"#666",fontSize:9,fontWeight:700,cursor:"default",flexShrink:0}}>?<span style={{position:"absolute",left:"50%",bottom:"calc(100% + 4px)",transform:"translateX(-50%)",background:"#333",color:"#fff",fontSize:10,fontWeight:400,padding:"3px 7px",borderRadius:3,whiteSpace:"nowrap",pointerEvents:"none",opacity:0,transition:"opacity .15s"}} className="zoe-tooltip-text">Ask Zoe about it</span></span>
             </div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{a}</div>
             <div style={{padding:"13px 20px",fontSize:13,color:"#555"}}>{b}</div>
@@ -951,7 +977,7 @@ In the Velociti Distance, full-length HOVR+ runs the entire length of the shoe t
           onConfirm={()=>{
             setShowModal(false);
             setPage("comparison");
-            streamInitial({ text:"Here's a quick breakdown of the two shoes:\n\n🟢 Lokedi PE — £225\nCarbon plate · 221g · 2mm drop · Race day only\n\n🔵 Velociti Distance — £145\nHOVR+ foam · 298g · 6mm drop · 3–5×/week\n\nThe big difference: the Lokedi PE has a carbon fibre plate, the Distance doesn't. Ask me anything — price gap, cushioning, heel offset, or which one suits you best.", suggestedQs:["Why is there such a price difference?","Which shoe is better for a first marathon?","What does heel offset mean?"] });
+            streamInitial({ text:"Here's a quick breakdown of the two shoes:\n\nLokedi PE — £225\nCarbon plate · 221g · 2mm drop · Race day only\n\nVelociti Distance — £145\nHOVR+ foam · 298g · 6mm drop · 3–5×/week\n\nThe key difference: the Lokedi PE has a carbon fibre plate, the Distance doesn't. Ask me anything — price gap, cushioning, heel offset, or which one suits you best.", suggestedQs:["Why is there such a price difference?","Which shoe is better for a first marathon?","What does heel offset mean?"] });
           }}
           onClose={()=>setShowModal(false)}
         />
