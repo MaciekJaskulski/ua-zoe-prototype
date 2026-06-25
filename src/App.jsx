@@ -96,17 +96,11 @@ function isPriceQ(t){
   return (s.includes("expensive")||s.includes("price")||s.includes("cost")||s.includes("worth")||s.includes("cheap")||s.includes("why")&&s.includes("more")||s.includes("difference")&&(s.includes("price")||s.includes("cost")||s.includes("£"))||s.includes("justify")||s.includes("pay")||s.includes("pricey"))
     && (s.includes("lokedi")||s.includes("elite")||s.includes("sharon")||s.includes("expensive")||s.includes("more")||s.includes("225")||s.includes("cost"));
 }
-const LOKEDI_PRICE_ANSWER = `The Velociti Elite 3 'Sharon Lokedi' PE is a full race-day system built around a full-length carbon fibre plate — the same technology that powers world-record marathon performances.
+const LOKEDI_PRICE_ANSWER = `The Lokedi PE is built around a full-length carbon fibre plate — the same technology behind world-record marathon performances. The plate acts as a spring: it stores energy on landing and releases it explosively at toe-off, improving running economy by 4–8% per stride.
 
-The carbon plate acts as a spring in the midsole. On landing it stores energy, and at toe-off it releases it explosively, propelling you forward with significantly less muscular effort. Research shows this improves running economy by 4–8% per stride — over 42km, that's the difference between fading at mile 20 and finishing strong.
+Everything else is engineered around it: HOVR+ superfoam, a featherlight Leno weave upper, 221g total weight, and a 2mm heel drop to channel your stride directly into the plate's flex point.
 
-Everything in the shoe is engineered to work with that plate:
-• HOVR+ superfoam — UA's lightest, most responsive cushioning, tuned to complement the plate's snap
-• Leno weave upper — specialist construction that locks your foot in place at race pace while weighing almost nothing
-• 221g — among the lightest marathon shoes on the market
-• 2mm heel drop — positions your foot to transfer energy directly into the plate's flex point
-
-It was co-developed with Sharon Lokedi, who wore it to win the Boston Marathon 2025 and set a course record. It's a precision race instrument — every gram and every layer of it is there for a reason.`;
+Sharon Lokedi wore it to win the Boston Marathon 2025. It's a race-day weapon — priced accordingly.`
 
 const PRICE_ANSWER_SHORT = `The £80 gap comes down to the carbon fibre plate in the Lokedi PE. That plate acts like a spring — it stores energy on landing and releases it explosively at toe-off, propelling you forward with less effort. It's the same technology that helped Sharon Lokedi win Boston 2025. The Distance uses pure HOVR+ foam — excellent for training, but without that mechanical propulsion boost. Put simply: the Lokedi PE is a race-day weapon, the Distance is your training workhorse.`;
 
